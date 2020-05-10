@@ -4,6 +4,7 @@
   "private": true,
   "description": "Base code for the Dendama-01 game",
   "repository": "git clone git@gitlab.com:neojp/dendama-01.git",
+  "homepage": "https://home.joanpiedra.com/dendama-01/",
   "license": "MIT",
   "author": "Joan Piedra <joan@joanpiedra.com> @neojp",
   "directories": {
