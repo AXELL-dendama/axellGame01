@@ -7,4 +7,11 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function() {
+  this.route('intro', { path: '/' });
+  this.route('choose-players');
+  this.route('choose-level', function() {
+    this.route('step1', { path: '/' });
+    this.route('step2');
+  });
+  this.route('choose-start-point');
 });

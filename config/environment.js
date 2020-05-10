@@ -1,5 +1,8 @@
 'use strict';
 
+const gameLevels = require('./game-levels.json');
+const gameTricks = require('./game-tricks.json');
+
 module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'dendama-01',
@@ -20,6 +23,8 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+      gameLevels,
+      gameTricks
     }
   };
 
@@ -29,6 +34,7 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.locationType = 'hash';
   }
 
   if (environment === 'test') {
@@ -45,6 +51,8 @@ module.exports = function(environment) {
 
   if (environment === 'production') {
     // here you can enable a production-specific feature
+    ENV.rootURL = '/dendama-01/';
+    ENV.locationType = 'none';
   }
 
   return ENV;

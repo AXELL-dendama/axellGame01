@@ -1,0 +1,20 @@
+<div class="absolute inset-0 flex flex-col">
+  <div class="flex-1">
+    <h2 class="text-4xl">Choose Start Point</h2>
+    <p class="mb-4">ス夕一トポイントを選択してください</p>
+
+    <div class="flex text-xs mb-4 justify-center text-5xl">
+      <button {{on "click" (fn this.selectPoint 100)}} class="border w-40 h-32 mx-2 hover:bg-gray-100 hover:border-2 p-2 {{if (eq this.selectPoint 100) "bg-gray-100 border-2"}}">
+        100
+      </button>
+
+      <button {{on "click" (fn this.selectPoint 300)}} class="border w-40 h-32 mx-2 hover:bg-gray-100 hover:border-2 p-2 {{if (eq this.selectPoint 300) "bg-gray-100 border-2"}}">
+        300
+      </button>
+
+      <button {{on "click" (fn this.selectPoint 500)}} class="border w-40 h-32 mx-2 hover:bg-gray-100 hover:border-2 p-2 {{if (eq this.selectPoint 500) "bg-gray-100 border-2"}}">
+        500
+      </button>
+    </div>
+  </div>
+</div>

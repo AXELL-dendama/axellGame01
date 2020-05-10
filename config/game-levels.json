@@ -1,0 +1,95 @@
+{
+  "lv1": [
+    "bigCup",
+    "smallCup",
+    "baseCup",
+    "bigCupJump",
+    ["bigCup", "baseCup"],
+    ["baseCup", "bigCup"]
+  ],
+  "lv2": [
+    "spike",
+    ["bigCup", "spike"],
+    ["bigCup", "smallCup"],
+    ["smallCup", "bigCup"],
+    "moshikame3"
+  ],
+  "lv3": [
+    ["smallCup", "bigCup", "spike"],
+    ["smallCup", "bigCup", "baseCup"],
+    ["baseCup", "spike"],
+    "baseball",
+    "orbit",
+    "moshikame5"
+  ],
+  "lv4": [
+    "theWorld",
+    "acrobats",
+    "fasthandBaseCup",
+    "fryingPan",
+    "airplane"
+  ],
+  "lv5": [
+    "swingSpike",
+    "lighthouse",
+    "earthTurn",
+    "bodyCatch",
+    ["fryingPan", "spike"]
+  ],
+  "lv6": [
+    "jumpingStick",
+    "bird",
+    "downspike",
+    ["baseCup", "downspike"],
+    "stuntplane",
+    ["lighthouse", "fallingIn"],
+    "aroundEurope"
+  ],
+  "lv7": [
+    "flipBigCup",
+    ["bigCup", "flipBigCup"],
+    "oneTurnAirplane",
+    "oneTurnLighthouse",
+    ["airplane", "lighthouse"],
+    "legend"
+  ],
+  "lv8": [
+    "lunar",
+    "gunslingerSpike",
+    "juggleBigCup",
+    "flipSmallCup",
+    "swingBird",
+    "underbird",
+    "aroundUsa"
+  ],
+  "lv9": [
+    "whirlwind",
+    "birdOverTheValley",
+    "doubleJstick",
+    "stilt",
+    "spacewalk",
+    "twoTurnAirplane",
+    "kenflipLighthouse"
+  ],
+  "lv10": [
+    "handlestall",
+    "juggleSpike",
+    "lunarFlip",
+    "lunarHalfTurnBarrelRoll",
+    "oneTurnStilt",
+    "oneTurnLunar",
+    "oneTurnStuntplane"
+  ],
+  "lv11": [
+    "aroundDenmark",
+    "lunarBarrelRoll",
+    "stuntplaneFlip",
+    "earthTurnBird",
+    "twoTurnLighthouse",
+    "stiltOverTheValley"
+  ],
+  "lv12": [
+    "stiltFlip",
+    "lunarRover360"
+  ]
+}
