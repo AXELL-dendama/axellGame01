@@ -41,10 +41,13 @@ button:active {
 }
 
 #btn-green {
-  background: green;
   margin-bottom: 10px;
 }
 
-#btn-red {
+.bg-green {
+  background: green;
+}
+
+.bg-red {
   background: red;
 }

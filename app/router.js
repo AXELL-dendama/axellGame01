@@ -14,4 +14,6 @@ Router.map(function() {
     this.route('step2');
   });
   this.route('choose-start-point');
+  this.route('rounds');
+  this.route('results');
 });

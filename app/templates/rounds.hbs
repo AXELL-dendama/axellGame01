@@ -1,0 +1,46 @@
+<div class="absolute inset-0 flex flex-col" {{did-insert this.animateIntro}}>
+
+  <h1 class="round-title absolute bg-yellow-200 inset-x-0 text-6xl transform -translate-y-1/2" style="top: 50%;">
+    <span class="round">ROUND {{this.currentRound}}</span>
+    <span class="name hidden">{{this.currentPlayerName}}</span>
+  </h1>
+
+  <div class="flex-1 flex">
+    <div class="flex-none w-48 p-3">
+      <div class="flex text-sm">
+        <button {{on "click" (fn this.toggleMenu true)}} class="border-0 px-2 text-white" style="background: red">MENU</button>
+        <h2 class="ml-2">ROUND {{this.currentRound}}/5</h2>
+      </div>
+      <div class="leading-none my-4" style="font-size: 6rem;">{{this.currentPoints}}</div>
+      <div class="border p-2 mx-3">
+        TIME
+        <div class="text-6xl leading-none">30</div>
+      </div>
+    </div>
+
+    <div class="flex-1 pt-2">
+
+      {{#each this.tricks as |trick|}}
+        {{log trick}}
+        <div class="bg-gray-100 border border-r-0 flex items-center h-20 mb-2">
+          <div class="text-5xl leading-none px-2">70</div>
+          <div class="flex-1 p-2 text-left">
+            <h2 class="font-bold leading-none mb-2 text-xl">{{trick.enName}}</h2>
+            <div class="flex">
+              <div class="flex-1 text-xs"><small>{{trick.jaName}}</small></div>
+              <span class="bg-gray-200 border block font-bold px-4 self-end text-xs">Lv{{trick.level}}</span>
+            </div>
+          </div>
+          <div class="bg-gray-200 border-l w-24 self-stretch">
+            {{!-- animation goes here --}}
+          </div>
+        </div>
+      {{/each}}
+
+
+
+    </div>
+  </div>
+
+  <PlayersRow @showLevel=true @showPoints=true @currentPlayer={{this.currentPlayer}} />
+</div>

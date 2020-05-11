@@ -6,8 +6,8 @@
 
   <div id="buttons" class="mt-8">
     <button id="btn-left" {{on "click" (fn this.triggerArcadeButton "left")}}></button>
-    <button id="btn-green" {{on "click" (fn this.triggerArcadeButton "green")}}></button>
-    <button id="btn-red" {{on "click" (fn this.triggerArcadeButton "red")}}></button>
+    <button id="btn-green" class="bg-green" {{on "click" (fn this.triggerArcadeButton "green")}}></button>
+    <button id="btn-red" class="bg-red" {{on "click" (fn this.triggerArcadeButton "red")}}></button>
     <button id="btn-right" {{on "click" (fn this.triggerArcadeButton "right")}}></button>
   </div>
 </div>
@@ -19,6 +19,12 @@
   </tr>
   <tr>
     <th class="border-t py-1 px-2">levelType</th>
-    <td class="border-t py-1 px-2">{{this.game.levelType}}</td>
+    <td class="border-t py-1 px-2">{{json this.game.levelType}}</td>
+  </tr>
+  <tr>
+    <th class="border-t pt-1 px-2" colspan="2">players</th>
+  </tr>
+  <tr>
+    <td class="pb-1 px-2" colspan="2">{{json this.game.players}}</td>
   </tr>
 </table>

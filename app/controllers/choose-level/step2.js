@@ -8,12 +8,11 @@ export default class ChooseLevelStep1Controller extends Controller {
   @service router;
 
   @tracked currentLevel = 1;
-  @tracked currentPlayer = 0; // base 0 index for players array
+  @tracked currentPlayer = null; // base 0 index for players array
   @tracked showConfirmation = false;
 
   // this values are resetted through the route
   @tracked playerLevels = [];
-  @tracked players = [];
 
   get maxLevel() {
     return Object.keys(this.game.levels).length;
@@ -21,32 +20,13 @@ export default class ChooseLevelStep1Controller extends Controller {
 
   get tricks() {
     const levelTricks = this.game.levels['lv' + this.currentLevel];
-
-    const mapTrick = (trickId) => {
-      // format multiple tricks per row
-      if (Array.isArray(trickId)) {
-        let enName = '', jaName = '';
-        const mapped = trickId.map(mapTrick);
-        mapped.forEach((t, i) => {
-          console.log(t);
-          enName += t.enName;
-          enName += i < mapped.length - 1 ? ', ' : '';
-          jaName += t.jaName;
-        });
-        return { enName, jaName };
-      }
-
-      // return single trick data
-      return this.game.tricks[trickId];
-    };
-
-    return levelTricks.map(mapTrick);
+    return levelTricks.map((trickId) => this.game.tricks[trickId]);
   }
 
   // initialize playerLevels (this only happens once)
   constructor() {
     super(...arguments);
-    this.playerLevels = this.players.map((v) => 1);
+    this.playerLevels = this.game.players.map((v) => 1);
   }
 
   @action downLevel() {
@@ -96,11 +76,9 @@ export default class ChooseLevelStep1Controller extends Controller {
       // go to the next screen
       } else {
         // set levels for all users
-        this.game.players = this.players.map((player, i) => {
-          return {
-            name: player.name,
-            level: this.currentLevel
-          };
+        this.game.players = this.game.players.map((player) => {
+          player.level = this.currentLevel;
+          return player;
         });
 
         this.showConfirmation = false; // clean up value first
@@ -135,11 +113,9 @@ export default class ChooseLevelStep1Controller extends Controller {
         // go to the next screen
         } else {
           // set levels for all users
-          this.game.players = this.players.map((player, i) => {
-            return {
-              name: player.name,
-              level: this.playerLevels[i]
-            };
+          this.game.players = this.game.players.map((player, i) => {
+            player.level = this.playerLevels[i];
+            return player;
           });
 
           this.showConfirmation = false; // clean up value first
@@ -194,17 +170,14 @@ export default class ChooseLevelStep1Controller extends Controller {
   }
 
   reset() {
-    const players = [];
     const playerLevels = [];
 
     for (let i = 0; i < this.game.playersCount; i++) {
-      players.push(i + 1);
       playerLevels.push(1);
     }
 
     this.currentLevel = 1;
-    this.currentPlayer = 0;
-    this.players = players;
+    this.currentPlayer = this.game.levelType === 2 ? 0 : null;
     this.playerLevels = playerLevels;
   }
 }

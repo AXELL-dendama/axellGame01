@@ -4,20 +4,20 @@
     "smallCup",
     "baseCup",
     "bigCupJump",
-    ["bigCup", "baseCup"],
-    ["baseCup", "bigCup"]
+    "bigCupBaseCup",
+    "baseCupBigCup"
   ],
   "lv2": [
     "spike",
-    ["bigCup", "spike"],
-    ["bigCup", "smallCup"],
-    ["smallCup", "bigCup"],
+    "bigCupSpike",
+    "bigCupSmallCup",
+    "smallCupBigCup",
     "moshikame3"
   ],
   "lv3": [
-    ["smallCup", "bigCup", "spike"],
-    ["smallCup", "bigCup", "baseCup"],
-    ["baseCup", "spike"],
+    "smallCupBigCupSpike",
+    "smallCupBigCupBaseCup",
+    "baseCupSpike",
     "baseball",
     "orbit",
     "moshikame5"
@@ -34,23 +34,23 @@
     "lighthouse",
     "earthTurn",
     "bodyCatch",
-    ["fryingPan", "spike"]
+    "fryingPanSpike"
   ],
   "lv6": [
     "jumpingStick",
     "bird",
     "downspike",
-    ["baseCup", "downspike"],
+    "baseCupDownspike",
     "stuntplane",
-    ["lighthouse", "fallingIn"],
+    "lighthouseFallingIn",
     "aroundEurope"
   ],
   "lv7": [
     "flipBigCup",
-    ["bigCup", "flipBigCup"],
+    "bigCupFlipBigCup",
     "oneTurnAirplane",
     "oneTurnLighthouse",
-    ["airplane", "lighthouse"],
+    "airplaneLighthouse",
     "legend"
   ],
   "lv8": [

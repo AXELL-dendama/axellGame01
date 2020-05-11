@@ -1,0 +1,23 @@
+<div class="flex justify-center items-end px-1">
+  {{#each this.players as |player i|}}
+    <span class="border border-b-0 flex-1 mx-1 max-w-xs {{if (eq @currentPlayer i) "py-1 bg-red-100 active"}}">
+      {{#if (and @showPoints player.points)}}
+        <span class="inline-block">{{player.points}}</span>
+        <small class="inline-block text-xs transform origin-bottom-right scale-90">
+          {{player.name}}
+
+          {{#if @showLevel}}
+            <b class="inline-block text-xs bg-gray-100 border px-1 origin-left transform scale-75">Lv{{player.level}}</b>
+          {{/if}}
+        </small>
+
+      {{else}}
+          {{player.name}}
+
+          {{#if @showLevel}}
+            <b class="inline-block text-xs bg-gray-100 border px-1 origin-left transform scale-75">Lv{{player.level}}</b>
+          {{/if}}
+      {{/if}}
+    </span>
+  {{/each}}
+</div>

@@ -30,7 +30,12 @@ export default class ChoosePlayersController extends Controller {
   // players count selected, move on
   @action select() {
     console.log(`selected, go to the next route with count ${this.playersCount}`);
+    const players = [];
+    for (let i = 0; i < this.playersCount; i++) {
+      players.push({ name: `PLAYER${i+1}`, level: 0, points: 0 });
+    }
     this.game.playersCount = this.playersCount;
+    this.game.players = players;
     this.router.transitionTo('choose-level');
   }
 

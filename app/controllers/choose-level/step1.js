@@ -7,8 +7,7 @@ export default class ChooseLevelStep1Controller extends Controller {
   @service game;
   @service router;
 
-  @tracked levelType = this.game.levelType;
-  @tracked players = [];
+  @tracked levelType = this.game.levelType; // 0 based index
 
   // update level type
   @action selectLevelType(type) {
@@ -52,13 +51,6 @@ export default class ChooseLevelStep1Controller extends Controller {
   }
 
   reset() {
-    const players = [];
-
-    for (let i = 0; i < this.game.playersCount; i++) {
-      players.push(i + 1);
-    }
-
     this.levelType = this.game.levelType;
-    this.players = players;
   }
 }

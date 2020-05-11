@@ -4,17 +4,33 @@
     <p class="mb-4">ス夕一トポイントを選択してください</p>
 
     <div class="flex text-xs mb-4 justify-center text-5xl">
-      <button {{on "click" (fn this.selectPoint 100)}} class="border w-40 h-32 mx-2 hover:bg-gray-100 hover:border-2 p-2 {{if (eq this.selectPoint 100) "bg-gray-100 border-2"}}">
-        100
-      </button>
-
-      <button {{on "click" (fn this.selectPoint 300)}} class="border w-40 h-32 mx-2 hover:bg-gray-100 hover:border-2 p-2 {{if (eq this.selectPoint 300) "bg-gray-100 border-2"}}">
-        300
-      </button>
-
-      <button {{on "click" (fn this.selectPoint 500)}} class="border w-40 h-32 mx-2 hover:bg-gray-100 hover:border-2 p-2 {{if (eq this.selectPoint 500) "bg-gray-100 border-2"}}">
-        500
-      </button>
+      {{#each this.points as |points i|}}
+        <button {{on "click" (fn this.selectPoints i)}} class="border w-40 h-32 mx-2 hover:bg-gray-100 hover:border-2 p-2 {{if (eq this.currentPoints i) "bg-gray-100 border-2"}}">
+          {{points}}
+        </button>
+      {{/each}}
     </div>
   </div>
+
+  {{#if this.showMenu}}
+    <div class="absolute border bg-white w-4/5 inset-x-0 mx-auto top-0 p-4 mt-12">
+      <p class="mb-4"><strong class="text-xl">MENU</strong></p>
+      <ul class="text-left text-xl">
+        <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 0) "bg-gray-100 border-gray-300"}}">
+          <button {{on "click" (fn this.toggleMenu false)}}>BACK TO GAME</button>
+        </li>
+        <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 1) "bg-gray-100 border-gray-300"}}">
+          <LinkTo @route="intro">BACK TO GAMETOP</LinkTo>
+        </li>
+        <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 2) "bg-gray-100 border-gray-300"}}">
+          <button {{on "click" (fn this.startManualPoints)}}>START POINT SETTING (MANUAL)</button>
+        </li>
+      </ul>
+    </div>
+  {{/if}}
+
+  <PlayersRow @players={{this.players}} @showLevel=true @showPoints=true @currentPlayer={{this.currentPlayer}} />
+
 </div>
+
+{{!-- @TODO: manual te deja elegir entre las 3 opciones para cada jugador. En el normal todos usan el mismo start point  --}}
