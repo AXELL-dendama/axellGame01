@@ -23,12 +23,6 @@ export default class ChooseLevelStep1Controller extends Controller {
     return levelTricks.map((trickId) => this.game.tricks[trickId]);
   }
 
-  // initialize playerLevels (this only happens once)
-  constructor() {
-    super(...arguments);
-    this.playerLevels = this.game.players.map((v) => 1);
-  }
-
   @action downLevel() {
     const level = this.currentLevel;
     this.currentLevel = level - 1 > 0 ? level - 1 : this.maxLevel;
