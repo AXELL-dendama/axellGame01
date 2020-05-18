@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>choices</title>
+    <link rel="stylesheet" href="https://joshuajohnson.co.uk/Choices/assets/styles/choices.min.css" />
+    <script src="https://joshuajohnson.co.uk/Choices/assets/scripts/choices.min.js"></script>
+    <style>
+      * { box-sizing: border-box; }
+      body { font-family: sans-serif; }
+      pre { word-wrap: break-word; }
+      .choices__list.choices__list--dropdown { pointer-events: none; }
+    </style>
+</head>
+<body>
+  <section>
+    <select id="choice" multiple></select>
+    <button id="btn">update</button>
+    <pre id="pre"></pre>
+  </section>
+  <script>
+    const items = ["acrobats", "airplane", "airplaneLighthouse", "aroundDenmark", "aroundEurope", "aroundUsa", "baseball", "baseCup", "baseCupBigCup", "baseCupDownspike", "baseCupSpike", "bigCup", "bigCupBaseCup", "bigCupFlipBigCup", "bigCupJump", "bigCupSmallCup", "bigCupSpike", "bird", "birdOverTheValley", "bodyCatch", "doubleJstick", "downspike", "earthTurn", "earthTurnBird", "fallingIn", "fasthandBaseCup", "flipBigCup", "flipSmallCup", "fryingPan", "fryingPanSpike", "gunslingerSpike", "handlestall", "juggleBigCup", "juggleSpike", "jumpingStick", "kenflipLighthouse", "legend", "lighthouse", "lighthouseFallingIn", "lunar", "lunarBarrelRoll", "lunarFlip", "lunarHalfTurnBarrelRoll", "lunarRover360", "moshikame3", "moshikame5", "oneTurnAirplane", "oneTurnLighthouse", "oneTurnLunar", "oneTurnStilt", "oneTurnStuntplane", "orbit", "smallCup", "smallCupBigCup", "smallCupBigCupBaseCup", "smallCupBigCupSpike", "spacewalk", "spike", "stilt", "stiltFlip", "stiltOverTheValley", "stuntplane", "stuntplaneFlip", "swingBird", "swingSpike", "theWorld", "twoTurnAirplane", "twoTurnLighthouse", "underbird", "whirlwind"];
+    const values = items.map((i) => { return `<option value="${i}">${i}</option>`; }).join('');
+    const element = document.querySelector('#choice');
+    const btn = document.querySelector('#btn');
+    const pre = document.querySelector('#pre');
+
+    element.innerHTML = values;
+
+    const choices = new Choices(element);
+
+    const update = () => {
+      const html = choices.getValue().map((v) => v.value);
+      pre.innerHTML = JSON.stringify(html);
+    };
+
+    btn.addEventListener('click', update);
+
+    element.addEventListener('addItem', update);
+    element.addEventListener('removeItem', update);
+    element.addEventListener('choice', update);
+  </script>
+</body>
+</html>
