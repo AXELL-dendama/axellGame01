@@ -1,95 +1,131 @@
 {
-  "lv1": [
-    "bigCup",
-    "smallCup",
-    "baseCup",
-    "bigCupJump",
-    "bigCupBaseCup",
-    "baseCupBigCup"
-  ],
-  "lv2": [
-    "spike",
-    "bigCupSpike",
-    "bigCupSmallCup",
-    "smallCupBigCup",
-    "moshikame3"
-  ],
-  "lv3": [
-    "smallCupBigCupSpike",
-    "smallCupBigCupBaseCup",
-    "baseCupSpike",
-    "baseball",
-    "orbit",
-    "moshikame5"
-  ],
-  "lv4": [
-    "theWorld",
-    "acrobats",
-    "fasthandBaseCup",
-    "fryingPan",
-    "airplane"
-  ],
-  "lv5": [
-    "swingSpike",
-    "lighthouse",
-    "earthTurn",
-    "bodyCatch",
-    "fryingPanSpike"
-  ],
-  "lv6": [
-    "jumpingStick",
-    "bird",
-    "downspike",
-    "baseCupDownspike",
-    "stuntplane",
-    "lighthouseFallingIn",
-    "aroundEurope"
-  ],
-  "lv7": [
-    "flipBigCup",
-    "bigCupFlipBigCup",
-    "oneTurnAirplane",
-    "oneTurnLighthouse",
-    "airplaneLighthouse",
-    "legend"
-  ],
-  "lv8": [
-    "lunar",
-    "gunslingerSpike",
-    "juggleBigCup",
-    "flipSmallCup",
-    "swingBird",
-    "underbird",
-    "aroundUsa"
-  ],
-  "lv9": [
-    "whirlwind",
-    "birdOverTheValley",
-    "doubleJstick",
-    "stilt",
-    "spacewalk",
-    "twoTurnAirplane",
-    "kenflipLighthouse"
-  ],
-  "lv10": [
-    "handlestall",
-    "juggleSpike",
-    "lunarFlip",
-    "lunarHalfTurnBarrelRoll",
-    "oneTurnStilt",
-    "oneTurnLunar",
-    "oneTurnStuntplane"
-  ],
-  "lv11": [
-    "aroundDenmark",
-    "lunarBarrelRoll",
-    "stuntplaneFlip",
-    "earthTurnBird",
-    "twoTurnLighthouse",
-    "stiltOverTheValley"
-  ],
-  "lv12": [
-    "stiltFlip",
-    "lunarRover360"
-  ]
+  "lv1": {
+    "points": 10,
+    "tricks": [
+      "bigCup",
+      "smallCup",
+      "baseCup",
+      "bigCupJump",
+      "bigCupBaseCup",
+      "baseCupBigCup"
+    ]
+  },
+  "lv2": {
+    "points": 15,
+    "tricks": [
+      "spike",
+      "bigCupSpike",
+      "bigCupSmallCup",
+      "smallCupBigCup",
+      "moshikame3"
+    ]
+  },
+  "lv3": {
+    "points": 20,
+    "tricks": [
+      "smallCupBigCupSpike",
+      "smallCupBigCupBaseCup",
+      "baseCupSpike",
+      "baseball",
+      "orbit",
+      "moshikame5"
+    ]
+  },
+  "lv4": {
+    "points": 25,
+    "tricks": [
+      "theWorld",
+      "acrobats",
+      "fasthandBaseCup",
+      "fryingPan",
+      "airplane"
+    ]
+  },
+  "lv5": {
+    "points": 30,
+    "tricks": [
+      "swingSpike",
+      "lighthouse",
+      "earthTurn",
+      "bodyCatch",
+      "fryingPanSpike"
+    ]
+  },
+  "lv6": {
+    "points": 35,
+    "tricks": [
+      "jumpingStick",
+      "bird",
+      "downspike",
+      "baseCupDownspike",
+      "stuntplane",
+      "lighthouseFallingIn",
+      "aroundEurope"
+    ]
+  },
+  "lv7": {
+    "points": 40,
+    "tricks": [
+      "flipBigCup",
+      "bigCupFlipBigCup",
+      "oneTurnAirplane",
+      "oneTurnLighthouse",
+      "airplaneLighthouse",
+      "legend"
+    ]
+  },
+  "lv8": {
+    "points": 45,
+    "tricks": [
+      "lunar",
+      "gunslingerSpike",
+      "juggleBigCup",
+      "flipSmallCup",
+      "swingBird",
+      "underbird",
+      "aroundUsa"
+    ]
+  },
+  "lv9": {
+    "points": 50,
+    "tricks": [
+      "whirlwind",
+      "birdOverTheValley",
+      "doubleJstick",
+      "stilt",
+      "spacewalk",
+      "twoTurnAirplane",
+      "kenflipLighthouse"
+    ]
+  },
+  "lv10": {
+    "points": 55,
+    "tricks": [
+      "handlestall",
+      "juggleSpike",
+      "lunarFlip",
+      "lunarHalfTurnBarrelRoll",
+      "oneTurnStilt",
+      "oneTurnLunar",
+      "oneTurnStuntplane"
+    ]
+  },
+  "lv11": {
+    "points": 60,
+    "tricks": [
+      "aroundDenmark",
+      "lunarBarrelRoll",
+      "stuntplaneFlip",
+      "earthTurnBird",
+      "twoTurnLighthouse",
+      "stiltOverTheValley"
+    ]
+  },
+  "lv12": {
+    "points": 65,
+    "tricks": [
+      "stiltFlip",
+      "lunarRover360"
+    ]
+  }
 }
