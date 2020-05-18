@@ -39,15 +39,14 @@ export default class ChooseStartPointController extends Controller {
     // default mode
     if (!this.manualMode) {
       this.game.players.forEach((player, i) => {
-        set(player, 'points', this.points[this.currentPoints]);
+        player.points = this.points[this.currentPoints];
       });
-      this.game.players = this.game.players;
       this.router.transitionTo('rounds');
       return;
     }
 
     // start: manual mode
-    if (this.currentPlayer < this.game.playersCount - 1) {
+    if (this.currentPlayer < this.game.players.length - 1) {
       // show next player
       this.nextPlayer();
       return;
@@ -58,9 +57,8 @@ export default class ChooseStartPointController extends Controller {
 
     // update game players data
     this.game.players.forEach((player, i) => {
-      set(player, 'points', this.points[this.playerPoints[i]]);
+      player.points = this.points[this.playerPoints[i]];
     });
-    this.game.players = this.game.players;
 
     this.router.transitionTo('rounds');
   }
@@ -71,7 +69,7 @@ export default class ChooseStartPointController extends Controller {
 
     // change player
     const index = this.currentPlayer;
-    const newIndex = index - 1 >= 0 ? index - 1 : this.game.playersCount - 1;
+    const newIndex = index - 1 >= 0 ? index - 1 : this.game.players.length - 1;
 
     this.currentPlayer = newIndex;
     this.currentLevel = this.playerPoints[newIndex] ? this.playerPoints[newIndex] : 1;
@@ -83,7 +81,7 @@ export default class ChooseStartPointController extends Controller {
 
     // change player
     const index = this.currentPlayer;
-    const newIndex = index + 1 < this.game.playersCount ? index + 1 : 0;
+    const newIndex = index + 1 < this.game.players.length ? index + 1 : 0;
 
     this.currentPlayer = newIndex;
     this.currentPoints = this.playerPoints[newIndex] ? this.playerPoints[newIndex] : 0;
@@ -108,7 +106,7 @@ export default class ChooseStartPointController extends Controller {
   reset() {
     const playerPoints = [];
 
-    for (let i = 0; i < this.game.playersCount; i++) {
+    for (let i = 0; i < this.game.players.length; i++) {
       playerPoints.push(0);
     }
 

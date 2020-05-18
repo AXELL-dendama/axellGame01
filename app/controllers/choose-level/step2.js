@@ -70,9 +70,8 @@ export default class ChooseLevelStep1Controller extends Controller {
       // go to the next screen
       } else {
         // set levels for all users
-        this.game.players = this.game.players.map((player) => {
+        this.game.players.forEach((player) => {
           player.level = this.currentLevel;
-          return player;
         });
 
         this.showConfirmation = false; // clean up value first
@@ -107,9 +106,8 @@ export default class ChooseLevelStep1Controller extends Controller {
         // go to the next screen
         } else {
           // set levels for all users
-          this.game.players = this.game.players.map((player, i) => {
+          this.game.players.forEach((player, i) => {
             player.level = this.playerLevels[i];
-            return player;
           });
 
           this.showConfirmation = false; // clean up value first

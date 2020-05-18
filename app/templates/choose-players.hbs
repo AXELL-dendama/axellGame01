@@ -4,14 +4,14 @@
     <p class="mb-4">参加する人数を選んでください</p>
 
     <div class="flex text-xl mb-4 justify-center">
-      <button {{on "click" (fn this.selectPlayers 1)}} class="border w-32 h-32 mx-2 hover:bg-gray-100 hover:border-2 {{if (eq this.playersCount 1) "bg-gray-100 border-2"}}">
+      <button {{on "click" (fn this.selectPlayers 1)}} class="border w-32 h-32 mx-2 hover:bg-gray-100 hover:border-2 {{if (eq this.currentPlayersCount 1) "bg-gray-100 border-2"}}">
         1 Player
         <div class="flex flex-wrap justify-center items-end w-16 h-16 mx-auto">
           <img src="icons/player.svg" alt="" width="24" class="m-1">
         </div>
       </button>
 
-      <button {{on "click" (fn this.selectPlayers 2)}} class="border w-32 h-32 mx-2 hover:bg-gray-100 hover:border-2 {{if (eq this.playersCount 2) "bg-gray-100 border-2"}}">
+      <button {{on "click" (fn this.selectPlayers 2)}} class="border w-32 h-32 mx-2 hover:bg-gray-100 hover:border-2 {{if (eq this.currentPlayersCount 2) "bg-gray-100 border-2"}}">
         2 Players
 
         <div class="flex flex-wrap justify-center items-end w-16 h-16 mx-auto">
@@ -20,7 +20,7 @@
         </div>
       </button>
 
-      <button {{on "click" (fn this.selectPlayers 3)}} class="border w-32 h-32 mx-2 hover:bg-gray-100 hover:border-2 {{if (eq this.playersCount 3) "bg-gray-100 border-2"}}">
+      <button {{on "click" (fn this.selectPlayers 3)}} class="border w-32 h-32 mx-2 hover:bg-gray-100 hover:border-2 {{if (eq this.currentPlayersCount 3) "bg-gray-100 border-2"}}">
         3 Players
 
         <div class="justify-center items-end w-16 h-16 mx-auto">
@@ -32,7 +32,7 @@
         </div>
       </button>
 
-      <button {{on "click" (fn this.selectPlayers 4)}} class="border w-32 h-32 mx-2 hover:bg-gray-100 hover:border-2 {{if (eq this.playersCount 4) "bg-gray-100 border-2"}}">
+      <button {{on "click" (fn this.selectPlayers 4)}} class="border w-32 h-32 mx-2 hover:bg-gray-100 hover:border-2 {{if (eq this.currentPlayersCount 4) "bg-gray-100 border-2"}}">
         4 Players
 
         <div class="flex flex-wrap justify-center items-end w-16 h-16 mx-auto">
