@@ -11,7 +11,7 @@
           {{/let}}
         {{/if}}
 
-        <button {{on "click" this.downLevel}}>
+        <button {{on "click" this.upLevel}}>
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 23.7 11.7" width="24" height="12" style="enable-background:new 0 0 23.7 11.7;" xml:space="preserve">
             <path d="M24,12L12,0L0,12H24z"/>
           </svg>
@@ -19,7 +19,7 @@
 
         <button {{on "click" this.select}} class="border bg-gray-100 py-1 px-3">LEVEL{{this.currentLevel}}</button>
 
-        <button {{on "click" this.upLevel}}>
+        <button {{on "click" this.downLevel}}>
           <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 23.7 11.7" width="24" height="12" style="enable-background:new 0 0 23.7 11.7;" xml:space="preserve">
             <path d="M0,0l12,12L24,0H0z"/>
           </svg>
