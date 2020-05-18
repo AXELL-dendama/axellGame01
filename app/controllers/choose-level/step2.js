@@ -19,7 +19,7 @@ export default class ChooseLevelStep1Controller extends Controller {
   }
 
   get tricks() {
-    const levelTricks = this.game.levels['lv' + this.currentLevel];
+    const levelTricks = this.game.levels['lv' + this.currentLevel].tricks;
     return levelTricks.map((trickId) => this.game.tricks[trickId]);
   }
 
