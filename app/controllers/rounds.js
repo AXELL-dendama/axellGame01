@@ -7,28 +7,126 @@ export default class RoundsController extends Controller {
   @service router;
   @service game;
 
-  @tracked showMenu = false;
-  @tracked showRoundTitle = true;
-  @tracked currentRound = 1;
-  @tracked currentPlayer = 0;
-  @tracked currentPoints = 0;
+  @tracked currentRound;
+  @tracked currentPlayer;
+  @tracked remainingTime;
+  @tracked currentPoints;
+  @tracked showRoundTitle;
+  @tracked showMenu;
+  @tracked showMenuButton;
+  @tracked showStartPrompt;
+  @tracked showTimer;
   @tracked tricks = [];
-  @tracked remainingTime = 30;
+
+  @tracked editingTricks;
+  @tracked currentTrick;
+  @tracked showEditConfirmation;
+
+  maxRounds = 5;
 
   get currentPlayerName() {
-    return this.game.players[this.currentPlayer].name;
+    return this.game.players[this.currentPlayer]?.name;
+  }
+
+  @action startRound() {
+    alert('start round');
+  }
+
+  @action startEditTricks() {
+    console.log('startEditTricks');
+    this.editingTricks = true;
+    this.showStartPrompt = false;
+    this.showEditConfirmation = false;
+    this.currentTrick = 0;
+  }
+
+  @action endEditTricks() {
+    console.log('endEditTricks');
+    this.showEditConfirmation = false;
+    this.editingTricks = false;
+    this.currentTrick = 0;
+  }
+
+  @action nextTrickInQueue() {
+    const trick = this.tricks[this.currentTrick];
+    const { current: index, key, queue } = trick;
+    const newIndex = index >= queue.length - 1 ? 0 : index + 1;
+    const newKey = queue[newIndex];
+
+    // update trick
+    trick.current = newIndex;
+    trick.key = newKey;
+  }
+
+  @action prevTrickInQueue() {
+    const trick = this.tricks[this.currentTrick];
+    const { current: index, key, queue } = trick;
+    const newIndex = index <= 0 ? queue.length - 1 : index - 1;
+    const newKey = queue[newIndex];
+
+    // update trick
+    trick.current = newIndex;
+    trick.key = newKey;
+  }
+
+  @action editNextTrick() {
+    const index = this.currentTrick;
+    this.currentTrick = index >= this.tricks.length - 1 ? 0 : index + 1;
+  }
+
+  @action editPrevTrick() {
+    const index = this.currentTrick;
+    this.currentTrick = index <= 0 ? this.tricks.length - 1 : index - 1;
+  }
+
+  @action editSelect() {
+    if (this.currentTrick + 1 < this.tricks.length) {
+      this.editNextTrick();
+    } else if (!this.showEditConfirmation) {
+      this.showEditConfirmation = true;
+      this.currentTrick = undefined;
+    } else {
+      this.endEditTricks();
+    }
   }
 
   // players count selected, move on
   @action handleArcadeButton(button) {
-    if (button === 'green') {
-      this.router.transitionTo('choose-players');
+    if (this.showStartPrompt) {
+      if (button === 'green') {
+        this.startRound();
+      }
+
+      if (button === 'red') {
+        this.startEditTricks();
+      }
+    }
+
+    if (this.editingTricks) {
+      switch(button) {
+        case 'green':
+          this.editSelect();
+          break;
+        case 'left':
+          this.prevTrickInQueue();
+          break;
+        case 'right':
+          this.nextTrickInQueue();
+          break;
+        case 'red':
+          if (!this.showEditConfirmation) {
+            if (this.currentTrick > 0) {
+              this.editPrevTrick();
+            }
+          } else {
+            this.startEditTricks();
+          }
+          break;
+      }
     }
   }
 
   @action animateIntro(element) {
-    console.log(element);
-
     element.querySelector('h1.round-title').classList.remove('hidden');
 
     setTimeout(() => {
@@ -44,36 +142,43 @@ export default class RoundsController extends Controller {
   }
 
   @action toggleMenu(bool) {
-    console.log('toggleMenu', bool);
     this.showMenu = bool;
   }
 
   reset() {
-    const { level, points } = this.game.players[0];
+    const currentLevel = this.game.players[0]?.level;
+    const points = this.game.players[0]?.points;
+
+    if (!this.game.players || !this.game.players[0] || !currentLevel) {
+      return this.router.transitionTo('intro');
+    }
 
     this.currentRound = 1;
     this.currentPlayer = 0;
-    this.showRoundTitle = true;
     this.remainingTime = 30;
     this.currentPoints = points;
-    this.allTricks = [];
 
-    for (let i = 1; i <= level; i++) {
-      const key = `lv${i}`;
-      console.log(key, this.game.levels[key]);
+    this.showRoundTitle = true;
 
-      this.game.levels[key].forEach((trickKey) => {
-        if (!Array.isArray(trickKey)) {
-          const trick = this.game.tricks[trickKey];
-          this.allTricks.push({
-            ...trick,
-            level: i
-          });
-        }
-      })
-    }
+    this.showMenu = false;
+    this.showMenuButton = false;
+    this.showStartPrompt = true;
+    this.showTimer = false;
+    this.editingTricks = false;
+    this.showEditConfirmation = false;
 
-    this.tricks = [...this.allTricks].sort(() => Math.random() - 0.5);
-    this.tricks = this.tricks.slice(0, 3);
+    this.currentTrick = 0;
+
+    const level = this.game.levels['lv' + currentLevel];
+    let tricks = level.tricks.map((key) => {
+      const trick = { @tracked current: undefined, @tracked key: undefined, queue: [] };
+      trick.queue = this.game.tricks[key].queue;
+      trick.key = key;
+      trick.current = trick.queue.indexOf(key);
+      return trick;
+    });
+    tricks = tricks.sort(() => Math.random() - 0.5).slice(0, 3);
+
+    this.tricks = tricks;
   }
 }

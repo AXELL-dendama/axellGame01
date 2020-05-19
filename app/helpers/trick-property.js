@@ -3,8 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default class extends Helper {
   @service game;
-  compute([key]) {
-    const { level } = this.game.tricks[key];
-    return this.game.levels['lv' + level].points;
+  compute([key, property]) {
+    return this.game.tricks[key][property];
   }
 }

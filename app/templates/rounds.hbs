@@ -1,46 +1,102 @@
 <div class="absolute inset-0 flex flex-col" {{did-insert this.animateIntro}}>
 
-  <h1 class="round-title absolute bg-yellow-200 inset-x-0 text-6xl transform -translate-y-1/2" style="top: 50%;">
+  <h1 class="round-title absolute bg-yellow-200 inset-x-0 text-6xl transform -translate-y-1/2 z-10" style="top: 50%;">
     <span class="round">ROUND {{this.currentRound}}</span>
     <span class="name hidden">{{this.currentPlayerName}}</span>
   </h1>
 
   <div class="flex-1 flex">
-    <div class="flex-none w-48 p-3">
+    <div class="flex-none w-48 p-3 mr-8">
       <div class="flex text-sm">
-        <button {{on "click" (fn this.toggleMenu true)}} class="border-0 px-2 text-white" style="background: red">MENU</button>
+        {{#if this.showMenuButton}}
+          <button {{on "click" (fn this.toggleMenu true)}} class="bg-red border-0 px-2 text-white">MENU</button>
+        {{/if}}
         <h2 class="ml-2">ROUND {{this.currentRound}}/5</h2>
       </div>
+
       <div class="leading-none my-4" style="font-size: 6rem;">{{this.currentPoints}}</div>
-      <div class="border p-2 mx-3">
-        TIME
-        <div class="text-6xl leading-none">30</div>
-      </div>
+
+      {{#if this.showStartPrompt}}
+        <div class="border mx-3 text-xs p-4">
+          <p>スタートしますか？</p>
+          <button {{on "click" this.startRound}} class="block bg-green my-2 text-white w-full">このままスタート</button>
+          <button {{on "click" this.startEditTricks}} class="block bg-red text-white w-full">レベルを変更</button>
+        </div>
+      {{/if}}
+
+      {{#if this.showTimer}}
+        <div class="border p-2 mx-3">
+          TIME
+          <div class="text-6xl leading-none">30</div>
+        </div>
+      {{/if}}
+
+      {{#if this.editingTricks}}
+        {{#if (not this.showEditConfirmation)}}
+          <p class="text-left text-xs">左右キーでトリックレベルを<br>変更できます</p>
+          <div class="my-4">
+            <img class="inline-block w-6 mr-2" src="/icons/button-left.svg" alt="">
+            <img class="inline-block w-6" src="/icons/button-right.svg" alt="">
+          </div>
+          <button {{on "click" this.editSelect}} class="block bg-green text-white w-full">SELECT</button>
+        {{else}}
+          <p>確定しますか？</p>
+          <button {{on "click" this.editSelect}} class="block bg-green my-2 text-white w-full">SELECT</button>
+          <button {{on "click" this.startEditTricks}} class="block bg-red text-white w-full">BACK</button>
+        {{/if}}
+      {{/if}}
     </div>
 
-    <div class="flex-1 pt-2">
+    <div class="flex-1 pt-2 relative">
 
-      {{#each this.tricks as |trick|}}
-        {{log trick}}
-        <div class="bg-gray-100 border border-r-0 flex items-center h-20 mb-2">
-          <div class="text-5xl leading-none px-2">70</div>
+      {{#each this.tricks as |trick i|}}
+        <div class="bg-gray-100 flex items-center h-20 mb-2 relative transform {{if (and this.editingTricks (eq this.currentTrick i)) "border-yellow-400 border-2 -translate-x-6" "border border-r-0"}}">
+          <div class="text-5xl leading-none px-2">{{trick-points trick.key}}</div>
           <div class="flex-1 p-2 text-left">
-            <h2 class="font-bold leading-none mb-2 text-xl">{{trick.enName}}</h2>
+            <h2 class="font-bold leading-none mb-2 text-md">{{trick-property trick.key "enName"}}</h2>
             <div class="flex">
-              <div class="flex-1 text-xs"><small>{{trick.jaName}}</small></div>
-              <span class="bg-gray-200 border block font-bold px-4 self-end text-xs">Lv{{trick.level}}</span>
+              <div class="flex-1 text-xs"><small>{{trick-property trick.key "jaName"}}</small></div>
+              <span class="bg-gray-200 border block font-bold px-4 self-end text-xs">Lv{{trick-property trick.key "level"}}</span>
             </div>
           </div>
           <div class="bg-gray-200 border-l w-24 self-stretch">
-            {{!-- animation goes here --}}
+            <img src="images/tricks/{{trick.key}}.gif" alt="">
           </div>
+
+          {{#if (and this.editingTricks (eq this.currentTrick i))}}
+            <button {{on "click" this.prevTrickInQueue}} class="absolute inset-y-0 left-0 transform -ml-6 w-4">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 76"><path d="M16,0,0,38,16,76Z" style="fill:#ff0"/></svg>
+            </button>
+            <button {{on "click" this.nextTrickInQueue}} class="absolute inset-y-0 right-0 transform -mr-6 w-4">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 76"><path d="M0,76,16,38,0,0Z" style="fill:#ff0"/></svg>
+            </button>
+          {{/if}}
         </div>
       {{/each}}
 
-
+      {{#if this.showEditConfirmation}}
+        <button {{on "click" this.editSelect}} class="border bg-gray-100 py-1 px-3 absolute left-0">確定</button>
+      {{/if}}
 
     </div>
   </div>
+
+  {{#if this.showMenu}}
+    <div class="absolute border bg-white w-4/5 inset-x-0 mx-auto top-0 p-4 mt-12">
+      <p class="mb-4"><strong class="text-xl">MENU</strong></p>
+      <ul class="text-left text-xl">
+        <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 0) "bg-gray-100 border-gray-300"}}">
+          <button {{on "click" (fn this.toggleMenu false)}}>BACK TO GAME</button>
+        </li>
+        <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 1) "bg-gray-100 border-gray-300"}}">
+          <LinkTo @route="intro">BACK TO GAMETOP</LinkTo>
+        </li>
+        {{!-- <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 2) "bg-gray-100 border-gray-300"}}">
+          <button {{on "click" (fn this.startManualPoints)}}>START POINT SETTING (MANUAL)</button>
+        </li> --}}
+      </ul>
+    </div>
+  {{/if}}
 
   <PlayersRow @showLevel=true @showPoints=true @currentPlayer={{this.currentPlayer}} />
 </div>
