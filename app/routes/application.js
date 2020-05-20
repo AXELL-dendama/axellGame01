@@ -5,8 +5,10 @@ import PubSub from 'pubsub-js';
 
 export default class ApplicationRoute extends Route {
   @service router;
+  @service game;
 
   pubsubTokens = [];
+  coldBoot = true;
 
   subscribeArcadeButtons = function(controller) {
     if (controller?.handleArcadeButton) {
@@ -20,6 +22,14 @@ export default class ApplicationRoute extends Route {
   actions = {
     didTransition() {
       run.schedule('render', () => {
+        if (this.coldBoot) {
+          this.coldBoot = false;
+
+          if (this.router.currentRouteName !== 'intro' && !this.game.players.length) {
+            return this.transitionTo('intro');
+          }
+        }
+
         const currentController = this.controllerFor(this.router.currentRouteName);
         this.subscribeArcadeButtons(currentController);
         if (currentController.reset) {
