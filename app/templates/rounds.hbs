@@ -1,4 +1,4 @@
-<div class="absolute inset-0 flex flex-col" {{did-insert this.animateIntro}}>
+<div {{did-insert this.animateIntro}} class="absolute inset-0 flex flex-col">
 
   <h1 class="round-title absolute bg-yellow-200 inset-x-0 text-6xl transform -translate-y-1/2 z-10" style="top: 50%;">
     <span class="round">ROUND {{this.currentRound}}</span>
@@ -24,10 +24,10 @@
         </div>
       {{/if}}
 
-      {{#if this.showTimer}}
+      {{#if this.showRoundCountdown}}
         <div class="border p-2 mx-3">
           TIME
-          <div class="text-6xl leading-none">30</div>
+          <div class="text-6xl leading-none">{{this.roundCountdown}}</div>
         </div>
       {{/if}}
 
@@ -80,6 +80,12 @@
 
     </div>
   </div>
+
+  {{#if this.showStartCountdown}}
+    <div class="absolute bg-white bg-opacity-75 leading-none rounded-full w-64 h-64 flex items-center justify-center transform -ml-32 -mt-32" style="font-size: 220px; top: 50%; left: 50%;">
+      <span class="-mt-5">{{this.startCountdown}}</span>
+    </div>
+  {{/if}}
 
   {{#if this.showMenu}}
     <div class="absolute border bg-white w-4/5 inset-x-0 mx-auto top-0 p-4 mt-12">

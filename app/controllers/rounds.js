@@ -3,6 +3,10 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export default class RoundsController extends Controller {
   @service router;
   @service game;
@@ -15,21 +19,32 @@ export default class RoundsController extends Controller {
   @tracked showMenu;
   @tracked showMenuButton;
   @tracked showStartPrompt;
-  @tracked showTimer;
   @tracked tricks = [];
 
   @tracked editingTricks;
   @tracked currentTrick;
   @tracked showEditConfirmation;
+  @tracked showStartCountdown;
+  @tracked startCountdown;
+  @tracked showRoundCountdown;
+  @tracked roundCountdown;
 
   maxRounds = 5;
+  roundCountdownPaused = true;
 
   get currentPlayerName() {
     return this.game.players[this.currentPlayer]?.name;
   }
 
-  @action startRound() {
-    alert('start round');
+  @action async startRound() {
+    console.log('start round');
+    this.showStartPrompt = false;
+    this.showStartCountdown = true;
+    this.showRoundCountdown = true;
+
+    await this.animateStartCountdown();
+    await this.animateRoundCountdown();
+    console.log('player round ended; try the next one');
   }
 
   @action startEditTricks() {
@@ -45,6 +60,7 @@ export default class RoundsController extends Controller {
     this.showEditConfirmation = false;
     this.editingTricks = false;
     this.currentTrick = 0;
+    this.startRound();
   }
 
   @action nextTrickInQueue() {
@@ -141,6 +157,27 @@ export default class RoundsController extends Controller {
     }, 1000);
   }
 
+  async animateStartCountdown() {
+    console.log('animateStartCountdown');
+    for (let i = this.startCountdown; i > 0; i--) {
+      this.startCountdown = i;
+      await sleep(1000);
+    }
+    this.showStartCountdown = false;
+    this.roundCountdownPaused = false;
+  }
+
+  // @TODO: figure out a way to pause this with `this.roundCountdownPaused`
+  async animateRoundCountdown() {
+    console.log('animateRoundCountdown', this.roundCountdownPaused);
+    this.roundCountdown = 5;
+    for (let i = this.roundCountdown; i > 0; i--) {
+      this.roundCountdown = i;
+      await sleep(1000);
+    }
+    console.log('animatedRoundCountdown ended');
+  }
+
   @action toggleMenu(bool) {
     this.showMenu = bool;
   }
@@ -163,11 +200,15 @@ export default class RoundsController extends Controller {
     this.showMenu = false;
     this.showMenuButton = false;
     this.showStartPrompt = true;
-    this.showTimer = false;
     this.editingTricks = false;
     this.showEditConfirmation = false;
 
     this.currentTrick = 0;
+    this.showStartCountdown = false;
+    this.startCountdown = 3;
+    this.roundCountdown = 30;
+
+    this.roundCountdownPaused = true;
 
     const level = this.game.levels['lv' + currentLevel];
     let tricks = level.tricks.map((key) => {
