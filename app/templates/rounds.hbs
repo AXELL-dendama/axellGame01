@@ -9,7 +9,7 @@
     <div class="flex-none w-48 p-3 mr-8">
       <div class="flex text-sm">
         {{#if this.showMenuButton}}
-          <button {{on "click" (fn this.toggleMenu true)}} class="bg-red border-0 px-2 text-white">MENU</button>
+          <button {{on "click" this.openMenu}} class="bg-red border-0 px-2 text-white">MENU</button>
         {{/if}}
         <h2 class="ml-2">ROUND {{this.currentRound}}/5</h2>
       </div>
@@ -95,14 +95,71 @@
           <button {{on "click" (fn this.toggleMenu false)}}>BACK TO GAME</button>
         </li>
         <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 1) "bg-gray-100 border-gray-300"}}">
-          <LinkTo @route="intro">BACK TO GAMETOP</LinkTo>
+          <LinkTo @route="intro">BACK TO GAMETOP (END THIS GAME)</LinkTo>
         </li>
-        {{!-- <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 2) "bg-gray-100 border-gray-300"}}">
-          <button {{on "click" (fn this.startManualPoints)}}>START POINT SETTING (MANUAL)</button>
-        </li> --}}
+        <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 2) "bg-gray-100 border-gray-300"}}">
+          <button {{on "click" (fn this.startEditPoints)}}>MODIFY POINTS</button>
+        </li>
+        <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 2) "bg-gray-100 border-gray-300"}}">
+          <button {{on "click" (fn this.retryRound)}}>RETRY</button>
+        </li>
       </ul>
     </div>
   {{/if}}
 
   <PlayersRow @showLevel=true @showPoints=true @currentPlayer={{this.currentPlayer}} />
 </div>
+
+
+{{!--
+Cada truco tiene distintos puntos
+Si hace los 3 trucos muestra una animacion (GREAT/SUCCESS) y recibe bonus points
+Sino, defrente mostrar el siguiente jugador
+
+
+
+la idea es que los puntos bajen hasta cero
+cada round reusa los puntos de cada jugador
+
+Hay un limite de 5 rounds
+
+Modifying points --> hasta 3 segundos del siguiente jugador
+
+primeros 3 trucos son al azar en cada round
+el jugador puede cambiarlos antes de empezar el round
+
+en el 1er round uno confirma sus trucos y juega su turno,
+luego el siguiente jugador confirma sus trucos y juega,
+etc, etc, etc
+
+en el 2do round, salen los mismos trucos del 1er round con opcion para cambiarlos
+
+
+
+@TODO:
+Choose start points (default vs manual)
+game-tricks.json debe tener puntos
+
+add these values to the config
+
+max 4 players
+max 5 rounds
+
+despues de elegir los trucos empieza un countdown de 3 a 0
+
+si se hace el truco ponle clear y disminuyen los puntos
+
+hay un bonus de 20 puntos por acabar los 3 trucos por round
+
+
+edge scenario = tu puntaje actual es menor a lo que se puede obtener con los trucos
+
+en tu turno + los 3 segundos del siguiente jugador
+permitir cambiar los resultados de los trucos (pag 36)
+permitir resetear un turno (pag 39)
+
+
+al final tengo que correr una funcion para guardar los puntos / ranking del usuario
+y luego tienes una opcion para presionar el boton rojo para volver al menu principal (TOP)
+
+ --}}
