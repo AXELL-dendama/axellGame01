@@ -8,7 +8,7 @@ export default class IntroController extends Controller {
 
   // players count selected, move on
   @action handleArcadeButton(button) {
-    if (button === 'green') {
+    if (button === 'up') {
       this.router.transitionTo('choose-players');
     }
   }

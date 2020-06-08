@@ -142,7 +142,7 @@ export default class ChooseStartPointController extends Controller {
 
   // handle arcade buttons
   @action handleArcadeButton(button) {
-    if (button === 'green') {
+    if (button === 'up') {
       if (!this.showMenu) {
         this.select();
       } else {
@@ -173,7 +173,7 @@ export default class ChooseStartPointController extends Controller {
       }
     }
 
-    if (button === 'red') {
+    if (button === 'down') {
       this.toggleMenu(!this.showMenu);
     }
   }

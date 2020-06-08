@@ -5,31 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Dendama01</title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=680, initial-scale=1">
-
+    <meta name="viewport" content="width=640, initial-scale=1">
     {{content-for "head"}}
-
-    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
-    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css">
-    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/dendama-01.css">
-
     {{content-for "head-footer"}}
   </head>
-  <body>
-    {{content-for "body"}}
+  <body class="text-center bg-gray-800">
+    <div id="container">
+      {{content-for "body"}}
 
-    <div id="app"></div>
+      <link href="{{rootURL}}tailwind-1.4.6.min.css" rel="stylesheet">
+      <link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css">
+      <link integrity="" rel="stylesheet" href="{{rootURL}}assets/dendama-01.css">
 
-    <script src="{{rootURL}}assets/vendor.js"></script>
-    <script src="{{rootURL}}assets/dendama-01.js"></script>
+      <div id="app-chrome" class="bg-white relative"></div>
+
+      <script src="{{rootURL}}assets/vendor.js"></script>
+      <script src="{{rootURL}}assets/dendama-01.js"></script>
+
+      {{content-for "body-footer"}}
+    </div>
+
     <script>
-      // simulate AJAX here
-      setTimeout(() => {
-        // start app in callback
-        require("dendama-01/app")["default"].create()
-      })
+      require("dendama-01/app")["default"].create()
     </script>
-
-    {{content-for "body-footer"}}
   </body>
 </html>

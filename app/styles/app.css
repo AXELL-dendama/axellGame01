@@ -1,3 +1,8 @@
+#app-chrome {
+  height: 320px;
+  width: 640px;
+}
+
 button {
   outline: none !important;
 }

@@ -46,7 +46,7 @@ export default class ChoosePlayersController extends Controller {
 
   // handle arcade buttons
   @action handleArcadeButton(button) {
-    if (button === 'green') {
+    if (button === 'up') {
       this.select();
     }
 
@@ -58,7 +58,7 @@ export default class ChoosePlayersController extends Controller {
       this.nextPlayer();
     }
 
-    if (button === 'red') {
+    if (button === 'down') {
       this.router.transitionTo('intro');
     }
   }

@@ -22,16 +22,30 @@ export default class ApplicationRoute extends Route {
   actions = {
     didTransition() {
       run.schedule('render', () => {
+        // booting app for the first time
         if (this.coldBoot) {
           this.coldBoot = false;
 
-          if (this.router.currentRouteName !== 'intro' && !this.game.players.length) {
-            return this.transitionTo('intro');
+          // add players from `game_settings` variable
+          const imported = this.game.importPlayersFromSettings();
+          if (imported && this.router.currentRouteName == 'intro') {
+            console.log('importPlayersFromSettings');
+            this.router.transitionTo('choose-level');
+          }
+
+          // go to intro
+          if (!imported && this.router.currentRouteName !== 'intro' && !this.game.players.length) {
+            console.log('transition to intro');
+            this.router.transitionTo('intro');
           }
         }
 
+        // subscribe arcade buttons
+        console.log('route/application.js subscribe arcade buttons', this.router.currentRouteName);
         const currentController = this.controllerFor(this.router.currentRouteName);
         this.subscribeArcadeButtons(currentController);
+
+        // reset controllers data
         if (currentController.reset) {
           currentController.reset();
         }
@@ -39,6 +53,7 @@ export default class ApplicationRoute extends Route {
     },
 
     willTransition() {
+      // unsubscribe arcade buttons
       if (this.pubsubTokens) {
         this.pubsubTokens.forEach((token) => {
           PubSub.unsubscribe(token);

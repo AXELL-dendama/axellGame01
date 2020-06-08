@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dendama01</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=680, initial-scale=1">
+    <script src="/ember-cli-live-reload.js" type="text/javascript"></script>
+
+    <script>
+      function nativeTrick(device_id, sensing_trick, final_trick, series_trick, mid_series_trick, second_trick) {
+        if (final_trick) {
+            PubSub.publish('DENDAMA_TRICK', final_trick);
+        }
+      }
+
+      // @TODO: we need to update this object with uids, name, and rating (level) from players
+      window.game_settings = {
+        "difficulty": null,
+        "game_pattern": "1",
+        "participant": { 1: true, 2: true, 3: true, 4: false },
+        "participant_num": 3,
+        "selected_rating": null
+      };
+
+      /*
+      // @TODO: we can receive an object like this on game_settings with the players' names
+      {"Item":
+        {"AppUserId":{"S":"1"},
+          "ArcadeName":{"S":"NameofPlayer"},
+          "Kentei":{"S":"{\"last_kentei_time\":\"2019-08-08 09:32:09\",\"success_list\":{\"BASIC\":{\"1\":{\"id\":\"e909bde6-1e44-4daa-b844-d896b08a968e\",\"created\":\"2019-08-08 08:12:05\",\"left_time\":51},\"2\":{\"id\":\"c375daf6-66cf-4bed-8b17-1d17353496fe\",\"created\":\"2019-08-08 08:10:26\",\"left_time\":63},\"3\":{\"id\":\"57d4068f-e34e-4d98-8b3d-2e4a54942f9a\",\"created\":\"2019-08-07 12:38:23\",\"left_time\":84}},\"ADVANCED\":{\"3\":{\"id\":\"d1ce73c0-e8cb-4067-87c0-f70c042cc3f5\",\"created\":\"2019-08-08 09:29:06\",\"left_time\":64}}},\"current\":\"ADVANCED_3\"}"},
+            "Kind":{"S":"Normal"},
+            "Modified":{"S":"2020-05-01 02:14:35"},
+            "Dgame":{"S":"undefined"},
+            "dendaMile":{"N":"140"},
+            "Game":{"S":"{\"time_attack\":\"43,74,6,33,0,33\",\"after_dark\":\"0\"}"},
+            "Id":{"S":"012E48C7E6CC3171"},
+            "Created":{"S":"2019-08-07 09:01:48"}
+        }
+      }
+      */
+    </script>
+  </head>
+  <body class="text-center bg-gray-800">
+    <div id="container">
+      <link href="/tailwind-1.4.6.min.css" rel="stylesheet">
+      <link integrity="" rel="stylesheet" href="/assets/vendor.css">
+      <link integrity="" rel="stylesheet" href="/assets/dendama-01.css">
+
+      <div class="w-screen h-screen flex flex-col items-center justify-center overflow-auto select-none" style="min-width: 680px; min-height: 462px;">
+        <div id="app-chrome" class="bg-white shadow relative"></div>
+
+        <div class="flex">
+          <div id="buttons" class="mt-8 mr-8">
+            <button id="btn-left" type="button" onclick="PubSub.publish('ARCADE_BUTTON', 'left');"></button>
+            <button id="btn-green" class="bg-green" type="button" onclick="PubSub.publish('ARCADE_BUTTON', 'up');"></button>
+            <button id="btn-red" class="bg-red" type="button" onclick="PubSub.publish('ARCADE_BUTTON', 'down');"></button>
+            <button id="btn-right" type="button" onclick="PubSub.publish('ARCADE_BUTTON', 'right');"></button>
+          </div>
+
+          <button type="button" onclick="PubSub.publish('DENDAMA_TRICK', 'debug');"><img src="/icons/kendama.svg" alt="Kendama"></button>
+        </div>
+      </div>
+
+      <script src="/assets/vendor.js"></script>
+      <script src="/assets/dendama-01.js"></script>
+    </div>
+
+    <script>
+      // simulate AJAX here
+      setTimeout(() => {
+        // start app in callback
+        require("dendama-01/app")["default"].create()
+      });
+    </script>
+  </body>
+</html>

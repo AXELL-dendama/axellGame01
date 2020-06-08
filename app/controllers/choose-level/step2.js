@@ -136,7 +136,7 @@ export default class ChooseLevelStep1Controller extends Controller {
 
   // handle arcade buttons
   @action handleArcadeButton(button) {
-    if (button === 'green') {
+    if (button === 'up') {
       this.select();
     }
 
@@ -148,7 +148,7 @@ export default class ChooseLevelStep1Controller extends Controller {
       this.upLevel();
     }
 
-    if (button === 'red') {
+    if (button === 'down') {
       if (this.showConfirmation) {
         return this.cancelConfirmation();
       }
