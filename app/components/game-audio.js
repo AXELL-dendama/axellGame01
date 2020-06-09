@@ -5,7 +5,7 @@ import config from '../config/environment';
 
 export default class GameAudioComponent extends Component {
   @service game;
-  rootUrl = config.rootURL;
+  rootURL = config.rootURL;
 
   @action didInsert(element) {
     element.volume = 0.2;
