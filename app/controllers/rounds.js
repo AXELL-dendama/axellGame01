@@ -86,9 +86,10 @@ export default class RoundsController extends Controller {
       this.resetRound(round);
       yield this.animateBannerTask.perform(isNextRound);
 
-    // @TODO end game, show results
+    // end game, show results
     } else {
       console.log('end game');
+      this.router.transitionTo('results');
     }
   }
 
@@ -343,7 +344,7 @@ export default class RoundsController extends Controller {
 
     // timer ran out, end round
     // @TODO: maybe show a message that the round ended?
-    console.log('animatedRoundCountdown ended');
+    // console.log('animatedRoundCountdown ended');
     yield this.nextRoundPlayerTask.perform();
   }
 

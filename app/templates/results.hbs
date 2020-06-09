@@ -1,3 +1,4 @@
+{{!-- @TODO: results: use data from service --}}
 <div class="absolute inset-0 flex flex-col">
   <div class="p-3 pb-1 text-left">
     <button class="border-0 px-2 text-white" style="background: red">MENU</button>
@@ -5,29 +6,13 @@
   <div class="flex-1">
     <h2 class="font-bold leading-none mb-4 text-4xl">RESULT</h2>
     <div class="flex justify-center">
-      <div class="border w-32 h-40 mx-2 p-2">
-        <div class="font-bold text-2xl">1st</div>
-        <div class="font-bold leading-none mt-1 mb-3 text-6xl">0</div>
-        PLAYER1
-      </div>
-
-      <div class="border w-32 h-40 mx-2 p-2">
-        <div class="font-bold text-2xl">3rd</div>
-        <div class="font-bold leading-none mt-1 mb-3 text-6xl">30</div>
-        PLAYER2
-      </div>
-
-      <div class="border w-32 h-40 mx-2 p-2">
-        <div class="font-bold text-2xl">2nd</div>
-        <div class="font-bold leading-none mt-1 mb-3 text-6xl">6</div>
-        PLAYER3
-      </div>
-
-      <div class="border w-32 h-40 mx-2 p-2">
-        <div class="font-bold text-2xl">4th</div>
-        <div class="font-bold leading-none mt-1 mb-3 text-6xl">55</div>
-        PLAYER4
-      </div>
+      {{#each this.players as |player|}}
+        <div class="border w-32 h-40 mx-2 p-2">
+          <div class="font-bold text-2xl">{{player.placeLabel}}</div>
+          <div class="font-bold leading-none mt-1 mb-3 text-6xl">{{player.points}}</div>
+          {{player.name}}
+        </div>
+      {{/each}}
     </div>
     <LinkTo @route="intro" class="border-0 rounded-sm inline-block mt-4 text-white px-2" style="background: green">BACK TO THE TOP</LinkTo>
   </div>
