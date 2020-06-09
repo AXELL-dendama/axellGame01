@@ -11,7 +11,7 @@
         {{#if this.showMenuButton}}
           <button type="button" {{on "click" this.openMenu}} class="bg-red border-0 px-2 text-white">MENU</button>
         {{/if}}
-        <h2 class="ml-2">ROUND {{this.currentRound}}/5</h2>
+        <h2 class="ml-2">ROUND {{this.currentRound}}/{{this.maxRounds}}</h2>
       </div>
 
       <div class="leading-none my-4 text-8xl">{{this.currentPoints}}</div>
