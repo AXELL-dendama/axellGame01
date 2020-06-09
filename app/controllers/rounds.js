@@ -166,6 +166,10 @@ export default class RoundsController extends Controller {
 
   // players count selected, move on
   handleArcadeButton(button) {
+    if (!this.animateBannerTask.isIdle) {
+      return;
+    }
+
     if (this.showMenuButton) {
       if (button === 'down') {
         // this.startEditTricks();
