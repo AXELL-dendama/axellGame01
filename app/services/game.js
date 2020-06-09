@@ -16,6 +16,9 @@ export default class GameService extends Service {
   levels = config.APP.gameLevels;
   tricks = config.APP.gameTricks;
 
+  // see GameAudio component
+  audioElement = undefined;
+
   reset() {
     this.levelType = 1;
     this.players = [];
