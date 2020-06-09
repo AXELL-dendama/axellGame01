@@ -8,13 +8,16 @@ export default class ResultsController extends Controller {
     const players = [...this.game.players];
     const sorted = [...this.game.players].sort((a, b) => a.points - b.points);
     const places = ['1st', '2nd', '3rd'];
-    players.map((player) => {
+
+    return players.map((player) => {
       const placeIndex = sorted.indexOf(player);
-      player.place = placeIndex;
-      player.placeLabel = places[placeIndex];
-      return player;
+      return {
+        place: placeIndex,
+        placeLabel: places[placeIndex],
+        name: player.name,
+        points: player.points
+      };
     });
-    return players;
   }
 
   sendGameResultsUpstream() {
