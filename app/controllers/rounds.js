@@ -22,10 +22,12 @@ export default class RoundsController extends Controller {
   @tracked showSuccessMessage;
   @tracked showRoundEndedMessage;
   @tracked showBonusPoints;
+  @tracked showTrickChallenge;
 
   @tracked tricks;
   @tracked editingTricks;
   @tracked currentTrick;
+  @tracked trickChallenge;
 
   @tracked startCountdown;
   @tracked roundCountdown;
@@ -89,6 +91,8 @@ export default class RoundsController extends Controller {
     // end game, show results
     } else {
       console.log('end game');
+      // @TODO show winner message
+      // yield timeout(1000);
       this.router.transitionTo('results');
     }
   }
@@ -221,6 +225,41 @@ export default class RoundsController extends Controller {
       return;
     }
 
+    // handle trick challenge
+    if (this.showTrickChallenge) {
+      // console.log('showTrickChallenge', { finalTrick });
+      const clearedTrick = finalTrick == 'debug' || finalTrick == this.trickChallenge.key;
+      if (!clearedTrick) {
+        return;
+      }
+
+      // stop counter
+      this.animateRoundCountdownTask.cancelAll();
+
+      // show success message
+      this.animateSuccessMessage.perform();
+
+      // update trick
+      this.trickChallenge.cleared = true;
+
+      // update points
+      this.currentPoints = 0;
+      this.game.players[this.currentPlayer].points = this.currentPoints;
+
+      // stop receiving events from dendama
+      this.isPlaying = false;
+
+      // pause
+      yield timeout(1000);
+
+      // @TODO show winner message
+      // yield ...
+
+      // end game
+      this.router.transitionTo('results');
+      return;
+    }
+
     // find if there's a trick that matches finalTrick
     let trick = this.tricks.find((trick) => trick.key === finalTrick);
 
@@ -237,24 +276,53 @@ export default class RoundsController extends Controller {
       // show success message
       this.animateSuccessMessage.perform();
 
-      // @TODO: tricks have a timeLimit (???)
-
-      // update current points
-      // @TODO: handle negative points
+      // calculate points earned
       const { level } = this.game.tricks[trick.key];
-      const points = this.game.levels['lv' + level].points;
-      this.currentPoints = this.currentPoints - points;
+      const clearedTrickPoints = this.game.levels['lv' + level].points;
+      let points = this.currentPoints - clearedTrickPoints;
+
+      // add bonus points
+      const unclearedTricks = this.tricks.filter((trick) => !trick.cleared);
+      if (!unclearedTricks.length) {
+        this.showBonusPoints = true;
+        points = points - this.bonusPoints;
+      }
 
       // @TODO: show crown
 
-      // end of player round
-      const unclearedTricks = this.tricks.filter((trick) => !trick.cleared);
-      if (!unclearedTricks.length) {
-        // handle bonus points
-        // @TODO: handle negative points
-        this.showBonusPoints = true;
-        this.currentPoints = this.currentPoints - this.bonusPoints;
+      // player is past 0 - show trick challenge
+      if (points <= 0) {
+        // stop counter
+        this.animateRoundCountdownTask.cancelAll();
 
+        // pause for a second to display cleared messages
+        yield timeout(1250);
+
+        // get a random trick based on player's level
+        const playerLevel = this.game.players[this.currentPlayer].level;
+        const { tricks } = this.game.levels['lv' + playerLevel];
+        const randomTrick = tricks[Math.floor(Math.random() * tricks.length)];
+
+        // set trick challenge and update UI
+        this.trickChallenge = { @tracked cleared: false, @tracked key: randomTrick };
+        this.showTrickChallenge = true;
+
+        // set round countdown to challenge trick
+        this.roundCountdown = this.game.tricks[randomTrick].timeLimit;
+
+        // @TODO show trick challenge message
+        // yield ....
+
+        // start round countdown
+        this.animateRoundCountdownTask.perform();
+        return;
+      }
+
+      // update points
+      this.currentPoints = points;
+
+      // end of player round
+      if (this.showBonusPoints) {
         // stop counter
         this.animateRoundCountdownTask.cancelAll();
 
@@ -335,8 +403,6 @@ export default class RoundsController extends Controller {
   }
 
   @task *animateRoundCountdownTask() {
-    this.roundCountdown = this.roundCountdownDefault;
-
     for (let i = this.roundCountdown; i > 0; i--) {
       this.roundCountdown = i;
       yield timeout(1000);
@@ -378,18 +444,19 @@ export default class RoundsController extends Controller {
 
   resetRound(round) {
     this.currentRound = round;
+    this.startCountdown = this.startCountdownDefault;
     this.roundCountdown = this.roundCountdownDefault;
     this.showStartPrompt = true;
     this.showMenuButton = false;
     this.showStartCountdown = false;
     this.showRoundCountdown = false;
-    this.startCountdown = this.startCountdownDefault;
-    this.roundCountdown = this.roundCountdownDefault;
     this.isPlaying = false;
     this.showMenu = false;
     this.showSuccessMessage = false;
     this.showRoundEndedMessage = false;
     this.showBonusPoints = false;
+    this.showTrickChallenge = false;
+    this.trickChallenge = undefined;
   }
 
   resetTrickEditing() {

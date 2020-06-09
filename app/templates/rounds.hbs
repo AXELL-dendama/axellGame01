@@ -57,38 +57,72 @@
     </div>
 
     <div class="flex-1 pt-2 relative">
-      {{#each this.tricks as |trick i|}}
-        <div class="bg-gray-100 flex items-center h-20 mb-2 relative transform {{if (and this.editingTricks (eq this.currentTrick i)) "border-yellow-400 border-2 -translate-x-6" "border border-r-0"}}">
-          <div class="text-5xl leading-none px-2 relative">
-            {{trick-points trick.key}}
-
-            <div class="{{unless trick.cleared 'hidden'}} animate__animated animate__pulse animate__faster absolute top-0 left-0">
-              <div class="animate__animated animate__fadeIn animate__faster  rounded-full w-16 h-16 flex items-center justify-center z-10 text-base border-2 bg-white bg-opacity-75 border-gray-300 transform -rotate-25 -mt-1 ml-1">
-                <b>CLEAR</b>
+      {{#if this.showTrickChallenge}}
+        {{#let this.trickChallenge as |trick|}}
+          <p class="mb-2 text-gray-800 text-sm">TRICK CHALLENGE: BEAT IT TO WIN!</p>
+          <div class="bg-gray-100 flex items-center h-20 mb-2 relative transform">
+            <div class="text-5xl leading-none px-2 relative">
+              <div class="{{unless trick.cleared 'hidden'}} animate__animated animate__pulse animate__faster absolute top-0 left-0">
+                <div class="animate__animated animate__fadeIn animate__faster  rounded-full w-16 h-16 flex items-center justify-center z-10 text-base border-2 bg-white bg-opacity-75 border-gray-300 transform -rotate-25 -mt-1 ml-1">
+                  <b>CLEAR</b>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="flex-1 p-2 text-left">
-            <h2 class="font-bold leading-none mb-2 text-md">{{trick-property trick.key "enName"}}</h2>
-            <div class="flex">
-              <div class="flex-1 text-xs"><small>{{trick-property trick.key "jaName"}}</small></div>
-              <span class="bg-gray-200 border block font-bold px-4 self-end text-xs">Lv{{trick-property trick.key "level"}}</span>
+            <div class="flex-1 p-2 text-left">
+              <h2 class="font-bold leading-none mb-2 text-md">{{trick-property trick.key "enName"}}</h2>
+              <div class="flex">
+                <div class="flex-1 text-xs"><small>{{trick-property trick.key "jaName"}}</small></div>
+                <span class="bg-gray-200 border block font-bold px-4 self-end text-xs">Lv{{trick-property trick.key "level"}}</span>
+              </div>
             </div>
-          </div>
-          <div class="bg-gray-200 border-l w-24 self-stretch">
-            <img src="images/tricks/{{trick.key}}.gif" alt="">
-          </div>
+            <div class="bg-gray-200 border-l w-24 self-stretch">
+              <img src="images/tricks/{{trick.key}}.gif" alt="">
+            </div>
 
-          {{#if (and this.editingTricks (eq this.currentTrick i))}}
-            <button type="button" {{on "click" this.prevTrickInQueue}} class="absolute inset-y-0 left-0 transform -ml-6 w-4">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 76"><path d="M16,0,0,38,16,76Z" style="fill:#ff0"/></svg>
-            </button>
-            <button type="button" {{on "click" this.nextTrickInQueue}} class="absolute inset-y-0 right-0 transform -mr-6 w-4">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 76"><path d="M0,76,16,38,0,0Z" style="fill:#ff0"/></svg>
-            </button>
-          {{/if}}
-        </div>
-      {{/each}}
+            {{#if (and this.editingTricks (eq this.currentTrick i))}}
+              <button type="button" {{on "click" this.prevTrickInQueue}} class="absolute inset-y-0 left-0 transform -ml-6 w-4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 76"><path d="M16,0,0,38,16,76Z" style="fill:#ff0"/></svg>
+              </button>
+              <button type="button" {{on "click" this.nextTrickInQueue}} class="absolute inset-y-0 right-0 transform -mr-6 w-4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 76"><path d="M0,76,16,38,0,0Z" style="fill:#ff0"/></svg>
+              </button>
+            {{/if}}
+          </div>
+        {{/let}}
+      {{else}}
+        {{#each this.tricks as |trick i|}}
+          <div class="bg-gray-100 flex items-center h-20 mb-2 relative transform {{if (and this.editingTricks (eq this.currentTrick i)) "border-yellow-400 border-2 -translate-x-6" "border border-r-0"}}">
+            <div class="text-5xl leading-none px-2 relative">
+              {{trick-points trick.key}}
+
+              <div class="{{unless trick.cleared 'hidden'}} animate__animated animate__pulse animate__faster absolute top-0 left-0">
+                <div class="animate__animated animate__fadeIn animate__faster  rounded-full w-16 h-16 flex items-center justify-center z-10 text-base border-2 bg-white bg-opacity-75 border-gray-300 transform -rotate-25 -mt-1 ml-1">
+                  <b>CLEAR</b>
+                </div>
+              </div>
+            </div>
+            <div class="flex-1 p-2 text-left">
+              <h2 class="font-bold leading-none mb-2 text-md">{{trick-property trick.key "enName"}}</h2>
+              <div class="flex">
+                <div class="flex-1 text-xs"><small>{{trick-property trick.key "jaName"}}</small></div>
+                <span class="bg-gray-200 border block font-bold px-4 self-end text-xs">Lv{{trick-property trick.key "level"}}</span>
+              </div>
+            </div>
+            <div class="bg-gray-200 border-l w-24 self-stretch">
+              <img src="images/tricks/{{trick.key}}.gif" alt="">
+            </div>
+
+            {{#if (and this.editingTricks (eq this.currentTrick i))}}
+              <button type="button" {{on "click" this.prevTrickInQueue}} class="absolute inset-y-0 left-0 transform -ml-6 w-4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 76"><path d="M16,0,0,38,16,76Z" style="fill:#ff0"/></svg>
+              </button>
+              <button type="button" {{on "click" this.nextTrickInQueue}} class="absolute inset-y-0 right-0 transform -mr-6 w-4">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 76"><path d="M0,76,16,38,0,0Z" style="fill:#ff0"/></svg>
+              </button>
+            {{/if}}
+          </div>
+        {{/each}}
+      {{/if}}
 
       {{#if this.showEditConfirmation}}
         <button type="button" {{on "click" this.editSelect}} class="border bg-gray-100 py-1 px-3 absolute left-0">確定</button>
@@ -123,7 +157,7 @@
   {{/if}}
 
   <div class="{{unless this.showRoundEndedMessage "hidden"}} absolute w-full h-full top-0 left-0 bg-yellow-200 z-20 flex justify-center items-center">
-    <span>PLAYER ROUND ENDED</span>
+    <div>PERFECT<br><small>PLAYER ROUND ENDED</small></div>
   </div>
 
   <PlayersRow @showLevel=true @showPoints=true @currentPlayer={{this.currentPlayer}} />
