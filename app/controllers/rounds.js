@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { timeout } from 'ember-concurrency';
 import { task, restartableTask } from 'ember-concurrency-decorators';
+import config from '../config/environment';
 
 export default class RoundsController extends Controller {
   @service router;
@@ -32,6 +33,7 @@ export default class RoundsController extends Controller {
   @tracked startCountdown;
   @tracked roundCountdown;
 
+  rootURL = config.rootURL;
   maxRounds = 5;
   bonusPoints = 20;
   startCountdownDefault = 3;
