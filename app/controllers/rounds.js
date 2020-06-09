@@ -21,6 +21,7 @@ export default class RoundsController extends Controller {
   @tracked showRoundCountdown;
   @tracked showSuccessMessage;
   @tracked showRoundEndedMessage;
+  @tracked showBonusPoints;
 
   @tracked tricks;
   @tracked editingTricks;
@@ -30,6 +31,7 @@ export default class RoundsController extends Controller {
   @tracked roundCountdown;
 
   maxRounds = 5;
+  bonusPoints = 20;
   startCountdownDefault = 3;
   roundCountdownDefault = 30;
   isPlaying = false;
@@ -237,7 +239,6 @@ export default class RoundsController extends Controller {
       // show success message
       this.animateSuccessMessage.perform();
 
-      // @TODO: handle bonus time?  https://xd.adobe.com/view/2f489957-660a-4605-6231-801cbd6af7f3-5979/screen/961c492f-55cb-45db-bbb4-de198001a711/-
       // @TODO: tricks have a timeLimit (???)
 
       // update current points
@@ -251,6 +252,11 @@ export default class RoundsController extends Controller {
       // end of player round
       const unclearedTricks = this.tricks.filter((trick) => !trick.cleared);
       if (!unclearedTricks.length) {
+        // handle bonus points
+        // @TODO: handle negative points
+        this.showBonusPoints = true;
+        this.currentPoints = this.currentPoints - this.bonusPoints;
+
         // stop counter
         this.animateRoundCountdownTask.cancelAll();
 
@@ -382,6 +388,7 @@ export default class RoundsController extends Controller {
     this.showMenu = false;
     this.showSuccessMessage = false;
     this.showRoundEndedMessage = false;
+    this.showBonusPoints = false;
   }
 
   resetTrickEditing() {
