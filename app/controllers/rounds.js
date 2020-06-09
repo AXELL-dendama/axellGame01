@@ -20,6 +20,7 @@ export default class RoundsController extends Controller {
   @tracked showStartCountdown;
   @tracked showRoundCountdown;
   @tracked showSuccessMessage;
+  @tracked showRoundEndedMessage;
 
   @tracked tricks;
   @tracked editingTricks;
@@ -72,6 +73,7 @@ export default class RoundsController extends Controller {
     this.game.players[this.currentPlayer].points = this.currentPoints;
 
     // @TODO: show full page animation
+    yield this.animateRoundEndedTask.perform();
 
     // go to the next player
     const nextPlayer = this.currentPlayer + 1 < this.game.players.length ? this.currentPlayer + 1 : 0;
@@ -232,10 +234,7 @@ export default class RoundsController extends Controller {
       this.animateSuccessMessage.perform();
 
       // @TODO: handle bonus time?  https://xd.adobe.com/view/2f489957-660a-4605-6231-801cbd6af7f3-5979/screen/961c492f-55cb-45db-bbb4-de198001a711/-
-      // @TODO: show big success animation  https://xd.adobe.com/view/2f489957-660a-4605-6231-801cbd6af7f3-5979/screen/e1e5542f-dbd4-4ebd-b676-51458f905c90/-
-
       // @TODO: tricks have a timeLimit (???)
-
 
       // update current points
       // @TODO: handle negative points
@@ -291,6 +290,12 @@ export default class RoundsController extends Controller {
     this.showSuccessMessage = true;
     yield timeout(1500);
     this.showSuccessMessage = false;
+  }
+
+  @task *animateRoundEndedTask() {
+    this.showRoundEndedMessage = true;
+    yield timeout(3000);
+    this.showRoundEndedMessage = false;
   }
 
   @task *animateStartCountdownTask() {
@@ -370,6 +375,7 @@ export default class RoundsController extends Controller {
     this.isPlaying = false;
     this.showMenu = false;
     this.showSuccessMessage = false;
+    this.showRoundEndedMessage = false;
   }
 
   resetTrickEditing() {

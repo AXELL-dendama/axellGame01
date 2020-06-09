@@ -119,6 +119,10 @@
     </div>
   {{/if}}
 
+  <div class="{{unless this.showRoundEndedMessage "hidden"}} absolute w-full h-full top-0 left-0 bg-yellow-200 z-20 flex justify-center items-center">
+    <span>PLAYER ROUND ENDED</span>
+  </div>
+
   <PlayersRow @showLevel=true @showPoints=true @currentPlayer={{this.currentPlayer}} />
 </div>
 
