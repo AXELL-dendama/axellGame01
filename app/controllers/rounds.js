@@ -74,9 +74,6 @@ export default class RoundsController extends Controller {
     // save current player's points
     this.game.players[this.currentPlayer].points = this.currentPoints;
 
-    // @TODO: show full page animation
-    yield this.animateRoundEndedTask.perform();
-
     // go to the next player
     const nextPlayer = this.currentPlayer + 1 < this.game.players.length ? this.currentPlayer + 1 : 0;
     const isNextRound = nextPlayer === 0;
@@ -265,6 +262,9 @@ export default class RoundsController extends Controller {
 
         // pause for a second to display cleared messages
         yield timeout(1250);
+
+        // show full page animation
+        yield this.animateRoundEndedTask.perform();
 
         // save points and go to the next player
         yield this.nextRoundPlayerTask.perform();
