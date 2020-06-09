@@ -3,10 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Dendama01</title>
+    <title>Dendama01 debug</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=680, initial-scale=1">
-    <script src="/ember-cli-live-reload.js" type="text/javascript"></script>
+
+    {{content-for "head"}}
+    {{content-for "head-footer"}}
 
     <script>
       function nativeTrick(device_id, sensing_trick, final_trick, series_trick, mid_series_trick, second_trick) {
@@ -44,9 +46,11 @@
   </head>
   <body class="text-center bg-gray-800">
     <div id="container">
-      <link href="/tailwind-1.4.6.min.css" rel="stylesheet">
-      <link integrity="" rel="stylesheet" href="/assets/vendor.css">
-      <link integrity="" rel="stylesheet" href="/assets/dendama-01.css">
+      {{content-for "body"}}
+
+      <link href="{{rootURL}}tailwind-1.4.6.min.css" rel="stylesheet">
+      <link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css">
+      <link integrity="" rel="stylesheet" href="{{rootURL}}assets/dendama-01.css">
 
       <div class="w-screen h-screen flex flex-col items-center justify-center overflow-auto select-none" style="min-width: 680px; min-height: 462px;">
         <div id="app-chrome" class="bg-white shadow relative"></div>
@@ -63,8 +67,8 @@
         </div>
       </div>
 
-      <script src="/assets/vendor.js"></script>
-      <script src="/assets/dendama-01.js"></script>
+      <script src="{{rootURL}}assets/vendor.js"></script>
+      <script src="{{rootURL}}assets/dendama-01.js"></script>
     </div>
 
     <script>
