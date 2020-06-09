@@ -72,3 +72,15 @@ button:active {
 .-rotate-25 {
   --transform-rotate: -25deg;
 }
+
+.z-1 {
+  z-index: 1;
+}
+
+.mt-28 {
+  margin-top: 7rem;
+}
+
+.mt-30 {
+  margin-top: 7.5rem;
+}

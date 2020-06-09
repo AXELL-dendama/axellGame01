@@ -45,17 +45,24 @@
           <button type="button" {{on "click" this.startEditTricks}} class="block bg-red text-white w-full">BACK</button>
         {{/if}}
       {{/if}}
+
+      {{#if this.showSuccessMessage}}
+        <div class="animate__animated animate__slideInLeft animate__faster text-xl bg-yellow-200 absolute top-0 left-0 mt-28 text-5xl px-6 py-1 z-1">
+          SUCCESS
+        </div>
+      {{/if}}
     </div>
 
     <div class="flex-1 pt-2 relative">
-
       {{#each this.tricks as |trick i|}}
         <div class="bg-gray-100 flex items-center h-20 mb-2 relative transform {{if (and this.editingTricks (eq this.currentTrick i)) "border-yellow-400 border-2 -translate-x-6" "border border-r-0"}}">
           <div class="text-5xl leading-none px-2 relative">
             {{trick-points trick.key}}
 
-            <div class="{{unless trick.cleared 'hidden'}}  absolute rounded-full w-16 h-16 flex items-center justify-center z-10 text-base border-2 bg-white bg-opacity-75 top-0 left-0 border-gray-300 transform -rotate-25 -mt-1 ml-1">
-              <b>CLEAR</b>
+            <div class="{{unless trick.cleared 'hidden'}} animate__animated animate__pulse animate__faster absolute top-0 left-0">
+              <div class="animate__animated animate__fadeIn animate__faster  rounded-full w-16 h-16 flex items-center justify-center z-10 text-base border-2 bg-white bg-opacity-75 border-gray-300 transform -rotate-25 -mt-1 ml-1">
+                <b>CLEAR</b>
+              </div>
             </div>
           </div>
           <div class="flex-1 p-2 text-left">
@@ -83,7 +90,6 @@
       {{#if this.showEditConfirmation}}
         <button type="button" {{on "click" this.editSelect}} class="border bg-gray-100 py-1 px-3 absolute left-0">確定</button>
       {{/if}}
-
     </div>
   </div>
 
