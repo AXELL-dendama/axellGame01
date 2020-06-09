@@ -47,8 +47,11 @@
       {{/if}}
 
       {{#if this.showSuccessMessage}}
-        <div class="animate__animated animate__slideInLeft animate__faster text-xl bg-yellow-200 absolute top-0 left-0 mt-28 text-5xl px-6 py-1 z-1">
-          SUCCESS
+        <div class="animate__animated animate__slideInLeft animate__faster text-xl bg-yellow-200 absolute top-0 left-0 mt-28 px-6 py-3 z-1 leading-none">
+          <div class="text-5xl">SUCCESS</div>
+          {{#if this.showBonusPoints}}
+            <div class="text-lg mt-1">BONUS +{{this.bonusPoints}}</div>
+          {{/if}}
         </div>
       {{/if}}
     </div>
