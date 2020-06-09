@@ -42,12 +42,13 @@
     <div id="container">
       {{content-for "body"}}
 
-      <link href="{{rootURL}}tailwind-1.4.6.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="{{rootURL}}animate-4.1.0.min.css">
+      <link rel="stylesheet" href="{{rootURL}}tailwind-1.4.6.min.css">
       <link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css">
       <link integrity="" rel="stylesheet" href="{{rootURL}}assets/dendama-01.css">
 
       <div class="w-screen h-screen flex flex-col items-center justify-center overflow-auto select-none" style="min-width: 680px; min-height: 462px;">
-        <div id="app-chrome" class="bg-white shadow relative"></div>
+        <div id="app-chrome" class="bg-white shadow relative overflow-hidden"></div>
 
         <div class="flex">
           <div id="buttons" class="mt-8 mr-8">
