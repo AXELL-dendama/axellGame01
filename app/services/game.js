@@ -55,7 +55,11 @@ export default class GameService extends Service {
     for (let i in importPlayers) {
       if (importPlayers[i]) {
         const player = this.newPlayer({
-          name: 'PLAYER' + i
+          name: 'PLAYER' + i,
+          // @TODO: remove level
+          level: 1,
+          // @TODO: remove points
+          points: 100
         });
         players.push(player);
       }

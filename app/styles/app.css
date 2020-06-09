@@ -56,3 +56,19 @@ button:active {
 .bg-red {
   background: red;
 }
+
+.text-7xl {
+  font-size: 5rem;
+}
+
+.text-8xl {
+  font-size: 6rem;
+}
+
+.leading-16 {
+  line-height: 4rem;
+}
+
+.-rotate-25 {
+  --transform-rotate: -25deg;
+}

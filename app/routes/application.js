@@ -19,6 +19,15 @@ export default class ApplicationRoute extends Route {
     }
   }
 
+  subscribeDendama = function(controller) {
+    if (controller?.handleDendama) {
+      const token = PubSub.subscribe('DENDAMA_TRICK', (msg, trick) => {
+        controller.handleDendama(trick);
+      });
+      this.pubsubTokens.push(token);
+    }
+  }
+
   actions = {
     didTransition() {
       run.schedule('render', () => {
@@ -44,6 +53,7 @@ export default class ApplicationRoute extends Route {
         console.log('route/application.js subscribe arcade buttons', this.router.currentRouteName);
         const currentController = this.controllerFor(this.router.currentRouteName);
         this.subscribeArcadeButtons(currentController);
+        this.subscribeDendama(currentController);
 
         // reset controllers data
         if (currentController.reset) {
