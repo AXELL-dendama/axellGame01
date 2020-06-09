@@ -3,6 +3,7 @@ import Resolver from 'ember-resolver';
 import loadInitializers from 'ember-load-initializers';
 import config from './config/environment';
 import './utils/pubsub';
+import './utils/native-trick';
 
 export default class App extends Application {
   rootElement = '#app-chrome';
