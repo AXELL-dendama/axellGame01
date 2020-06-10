@@ -84,9 +84,10 @@ export default class RoundsController extends Controller {
     // stop counter
     this.animateRoundCountdownTask.cancelAll();
 
-    // @TODO: save historical points grouped by round and player, used on modify points feature
-    // save current player's points
+    // save historical points grouped by round and player, used on modify points feature
     this.setHistoricalPoints();
+
+    // save current player's points
     this.game.players[this.currentPlayer].points = this.currentPoints;
 
     // go to the next player
@@ -158,12 +159,9 @@ export default class RoundsController extends Controller {
     this.currentTrick = index <= 0 ? this.tricks.length - 1 : index - 1;
   }
 
+  // @TODO: edit points
   @action startEditPoints() {
     console.log('startEditPoints');
-  }
-
-  @action resumeRound() {
-    this.resumeRoundTask.perform();
   }
 
   @task *resumeRoundTask() {
@@ -206,18 +204,21 @@ export default class RoundsController extends Controller {
     }
   }
 
-  // players count selected, move on
   handleArcadeButton(button) {
     if (!this.animateBannerTask.isIdle) {
       return;
     }
 
-    if (this.showMenuButton) {
+    if (this.showMenuButton && !this.showMenu) {
       if (button === 'down') {
-        // this.startEditTricks();
         this.openMenu();
         return;
       }
+    }
+
+    // @TODO: handle arcade buttons when the menu is opened
+    if (this.showMenu) {
+      return;
     }
 
     if (this.showStartPrompt) {
@@ -471,7 +472,6 @@ export default class RoundsController extends Controller {
     this.showMenu = true;
     this.animateStartCountdownTask.cancelAll();
     this.animateRoundCountdownTask.cancelAll();
-    // @TODO: handle pause / resume state
   }
 
   setInitialPlayerTricks(playerIndex) {
