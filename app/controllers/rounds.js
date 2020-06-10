@@ -181,7 +181,7 @@ export default class RoundsController extends Controller {
   }
 
   @action retryRound() {
-    console.log('retryRounds');
+    console.log('retryRound');
     // reset points
     this.currentPoints = this.game.players[this.currentPlayer].points;
 
