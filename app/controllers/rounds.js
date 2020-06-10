@@ -164,9 +164,16 @@ export default class RoundsController extends Controller {
 
   @action retryRound() {
     console.log('retryRounds');
-    this.startCountdown = this.startCountdownDefault;
-    this.roundCountdown = this.roundCountdownDefault;
-    this.showMenu = false;
+    // reset points
+    this.currentPoints = this.game.players[this.currentPlayer].points;
+
+    // reset tricks cleared status
+    this.tricks.forEach((trick) => {
+      trick.cleared = false;
+    });
+
+    // reset and start round
+    this.resetRound(this.currentRound);
     this.startRound();
   }
 
