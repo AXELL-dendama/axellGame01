@@ -38,14 +38,14 @@ export default class ApplicationRoute extends Route {
           // add players from `game_settings` variable
           const imported = this.game.importPlayersFromSettings();
           if (imported && this.router.currentRouteName == 'intro') {
-            console.log('importPlayersFromSettings');
-            this.router.transitionTo('choose-level');
+            console.log('importPlayersFromSettings', this.game.players);
+            return this.router.transitionTo('choose-level');
           }
 
           // go to intro
           if (!imported && this.router.currentRouteName !== 'intro' && !this.game.players.length) {
             console.log('transition to intro');
-            this.router.transitionTo('intro');
+            return this.router.transitionTo('intro');
           }
         }
 
