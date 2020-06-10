@@ -453,6 +453,7 @@ export default class RoundsController extends Controller {
 
   @action openMenu() {
     console.log('openMenu');
+    this.isPlaying = false;
     this.showMenu = true;
     this.animateStartCountdownTask.cancelAll();
     this.animateRoundCountdownTask.cancelAll();
