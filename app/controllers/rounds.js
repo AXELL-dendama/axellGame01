@@ -33,6 +33,8 @@ export default class RoundsController extends Controller {
   @tracked startCountdown;
   @tracked roundCountdown;
 
+  @tracked currentMenuOption;
+
   rootURL = config.rootURL;
   maxRounds = 5;
   bonusPoints = 20;
@@ -164,6 +166,16 @@ export default class RoundsController extends Controller {
     console.log('startEditPoints');
   }
 
+  prevMenuOption() {
+    const index = this.currentMenuOption;
+    this.currentMenuOption = index - 1 >= 0 ? index - 1 : 3;
+  }
+
+  nextMenuOption() {
+    const index = this.currentMenuOption;
+    this.currentMenuOption = index + 1 <= 3 ? index + 1 : 0;
+  }
+
   @task *resumeRoundTask() {
     console.log('resumeRound');
     this.showMenu = false;
@@ -218,6 +230,30 @@ export default class RoundsController extends Controller {
 
     // @TODO: handle arcade buttons when the menu is opened
     if (this.showMenu) {
+      if (button === 'left') {
+        return this.prevMenuOption();
+      }
+
+      if (button === 'right') {
+        return this.nextMenuOption();
+      }
+
+      if (button === 'up') {
+        switch (this.currentMenuOption) {
+          case 0:
+            return this.resumeRoundTask.perform();
+          case 1:
+            return this.router.transitionTo('intro');
+          case 2:
+            return this.startEditPoints();
+          case 3:
+            return this.retryRound();
+        }
+      }
+
+      if (button === 'down') {
+        return this.resumeRoundTask.perform();
+      }
       return;
     }
 
@@ -470,6 +506,7 @@ export default class RoundsController extends Controller {
     console.log('openMenu');
     this.isPlaying = false;
     this.showMenu = true;
+    this.currentMenuOption = 0;
     this.animateStartCountdownTask.cancelAll();
     this.animateRoundCountdownTask.cancelAll();
   }
@@ -522,6 +559,7 @@ export default class RoundsController extends Controller {
 
     // start reset here
     this.roundPoints = {};
+    this.currentMenuOption = 0;
     this.resetTrickEditing();
     this.resetRound(1);
     this.setCurrentPlayer(0);
