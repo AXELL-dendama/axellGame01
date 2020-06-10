@@ -141,7 +141,7 @@
       <p class="mb-4"><strong class="text-xl">MENU</strong></p>
       <ul class="text-left text-xl">
         <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 0) "bg-gray-100 border-gray-300"}}">
-          <button type="button" {{on "click" (fn this.toggleMenu false)}}>BACK TO GAME</button>
+          <button type="button" {{on "click" this.resumeRound}}>BACK TO GAME</button>
         </li>
         <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 1) "bg-gray-100 border-gray-300"}}">
           <LinkTo @route="intro">BACK TO GAMETOP (END THIS GAME)</LinkTo>

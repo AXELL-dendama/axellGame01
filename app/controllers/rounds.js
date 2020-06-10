@@ -162,6 +162,24 @@ export default class RoundsController extends Controller {
     console.log('startEditPoints');
   }
 
+  @action resumeRound() {
+    this.resumeRoundTask.perform();
+  }
+
+  @task *resumeRoundTask() {
+    console.log('resumeRound');
+    this.showMenu = false;
+
+    // if we still havent started the round, restart the countdown
+    if (this.showStartCountdown) {
+      yield this.animateStartCountdownTask.perform();
+    }
+
+    // resume player round
+    this.isPlaying = true;
+    yield this.animateRoundCountdownTask.perform();
+  }
+
   @action retryRound() {
     console.log('retryRounds');
     // reset points
