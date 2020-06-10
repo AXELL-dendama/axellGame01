@@ -465,10 +465,6 @@ export default class RoundsController extends Controller {
     yield this.nextRoundPlayerTask.perform();
   }
 
-  @action toggleMenu(bool) {
-    this.showMenu = bool;
-  }
-
   @action openMenu() {
     console.log('openMenu');
     this.isPlaying = false;
