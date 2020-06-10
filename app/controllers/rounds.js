@@ -40,9 +40,18 @@ export default class RoundsController extends Controller {
   roundCountdownDefault = 30;
   isPlaying = false;
   bannerEl = undefined;
+  roundPoints = {};
 
   get currentPlayerName() {
     return this.game.players[this.currentPlayer]?.name;
+  }
+
+  saveHistoricalPoints() {
+    if (!this.roundPoints['round' + this.currentRound]) {
+      this.roundPoints['round' + this.currentRound] = [];
+    }
+
+    this.roundPoints['round' + this.currentRound][this.currentPlayer] = this.currentPoints;
   }
 
   setCurrentPlayer(index) {
@@ -75,7 +84,9 @@ export default class RoundsController extends Controller {
     // stop counter
     this.animateRoundCountdownTask.cancelAll();
 
+    // @TODO: save historical points grouped by round and player, used on modify points feature
     // save current player's points
+    this.saveHistoricalPoints();
     this.game.players[this.currentPlayer].points = this.currentPoints;
 
     // go to the next player
@@ -246,6 +257,11 @@ export default class RoundsController extends Controller {
 
       // update points
       this.currentPoints = 0;
+
+      // save historical points grouped by round and player
+      this.saveHistoricalPoints();
+
+      // update player's points
       this.game.players[this.currentPlayer].points = this.currentPoints;
 
       // stop receiving events from dendama
@@ -411,7 +427,6 @@ export default class RoundsController extends Controller {
     }
 
     // timer ran out, end round
-    // @TODO: maybe show a message that the round ended?
     // console.log('animatedRoundCountdown ended');
     yield this.nextRoundPlayerTask.perform();
   }
@@ -475,6 +490,7 @@ export default class RoundsController extends Controller {
     }
 
     // start reset here
+    this.roundPoints = {};
     this.resetTrickEditing();
     this.resetRound(1);
     this.setCurrentPlayer(0);
