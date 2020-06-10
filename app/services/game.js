@@ -13,6 +13,15 @@ export default class GameService extends Service {
     return this.players.length;
   }
 
+  get playersSortedByPlace() {
+    return [...this.players].sort((a, b) => a.points - b.points);
+  }
+
+  get winningPlayerIndex() {
+    const firstPlayer = this.playersSortedByPlace[0];
+    return this.players.indexOf(firstPlayer);
+  }
+
   levels = config.APP.gameLevels;
   tricks = config.APP.gameTricks;
 

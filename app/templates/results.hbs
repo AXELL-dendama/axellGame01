@@ -6,9 +6,14 @@
   <div class="flex-1">
     <h2 class="font-bold leading-none mb-4 text-4xl">RESULT</h2>
     <div class="flex justify-center">
-      {{#each this.players as |player|}}
+      {{#each this.players as |player i|}}
         <div class="border w-32 h-40 mx-2 p-2">
-          <div class="font-bold text-2xl">{{player.placeLabel}}</div>
+          <div class="font-bold text-2xl relative">
+            {{#if (eq this.game.winningPlayerIndex i)}}
+              <img src="{{this.rootURL}}icons/crown.svg" alt="Winning player" class="absolute w-3 h-3 -ml-1" style="left: 50%; bottom: 80%;">
+            {{/if}}
+            {{player.placeLabel}}
+          </div>
           <div class="font-bold leading-none mt-1 mb-3 text-6xl">{{player.points}}</div>
           {{player.name}}
         </div>
