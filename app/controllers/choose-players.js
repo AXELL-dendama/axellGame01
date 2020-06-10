@@ -3,6 +3,7 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import ChooseLevelStep1Controller from './choose-level/step1';
+import config from '../config/environment';
 
 export default class ChoosePlayersController extends Controller {
   @service game;
@@ -10,6 +11,8 @@ export default class ChoosePlayersController extends Controller {
 
   // number from 1 to 4
   @tracked currentPlayersCount;
+
+  rootURL = config.rootURL;
 
   @action selectPlayers(count) {
     this.currentPlayersCount = count;

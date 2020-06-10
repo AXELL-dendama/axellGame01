@@ -35,8 +35,8 @@
         {{#if (not this.showEditConfirmation)}}
           <p class="text-left text-xs">左右キーでトリックレベルを<br>変更できます</p>
           <div class="my-4">
-            <img class="inline-block w-6 mr-2" src="/icons/button-left.svg" alt="">
-            <img class="inline-block w-6" src="/icons/button-right.svg" alt="">
+            <img class="inline-block w-6 mr-2" src="{{this.rootURL}}icons/button-left.svg" alt="">
+            <img class="inline-block w-6" src="{{this.rootURL}}icons/button-right.svg" alt="">
           </div>
           <button type="button" {{on "click" this.editSelect}} class="block bg-green text-white w-full">SELECT</button>
         {{else}}
@@ -76,7 +76,7 @@
               </div>
             </div>
             <div class="bg-gray-200 border-l w-24 self-stretch">
-              <img src="{{rootURL}}images/tricks/{{trick.key}}.gif" alt="">
+              <img src="{{this.rootURL}}images/tricks/{{trick.key}}.gif" alt="">
             </div>
 
             {{#if (and this.editingTricks (eq this.currentTrick i))}}
@@ -109,7 +109,7 @@
               </div>
             </div>
             <div class="bg-gray-200 border-l w-24 self-stretch">
-              <img src="{{rootURL}}images/tricks/{{trick.key}}.gif" alt="">
+              <img src="{{this.rootURL}}images/tricks/{{trick.key}}.gif" alt="">
             </div>
 
             {{#if (and this.editingTricks (eq this.currentTrick i))}}
