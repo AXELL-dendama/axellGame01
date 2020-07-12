@@ -505,8 +505,13 @@ export default class RoundsController extends Controller {
             this.currentModifyingPlayer = undefined;
             return;
           } else {
-            this.currentMenuOption = 0;
-            this.currentModifyingPlayer = undefined;
+            // go back to choosing a player
+            if (this.currentMenuOption === 0) {
+              this.currentModifyingPlayer = undefined;
+            // select previous trick
+            } else {
+              this.currentMenuOption--;
+            }
             return;
           }
         } else {

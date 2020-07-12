@@ -148,7 +148,7 @@
                 <span class="flex-1 truncate">{{trick-property trick.key "enName"}}</span>
                 <span class="ml-4 px-6 relative text-center text-base w-32">
                   <span {{on "click" this.modifyNextTrick}}>
-                    {{#if trick.cleared}}SUCCESS{{else}}&nbsp;{{/if}}
+                    {{#if trick.cleared}}SUCCESS{{else}}FAIL{{/if}}
                   </span>
                   {{#if (eq this.currentMenuOption i)}}
                     <button type="button" {{on "click" (fn this.toggleTrickCleared trick)}} class="absolute inset-y-0 left-0 transform w-4">
@@ -169,11 +169,11 @@
               <button type="button" {{on "click" this.showModifyCurrentPlayerPoints}}>{{this.currentPlayerName}}</button>
             </li>
             {{!-- Don't show "previous player" on 1st round + 1st player --}}
-            {{!-- {{#if (not (and (eq this.currentRound 1) (eq this.currentPlayer 0)))}} --}}
+            {{#if (not (and (eq this.currentRound 1) (eq this.currentPlayer 0)))}}
               <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 1) "bg-gray-100 border-gray-300"}}">
                 <button type="button" {{on "click" this.showModifyPreviousPlayerPoints}}>１つ前のプレイヤ一</button>
               </li>
-            {{!-- {{/if}} --}}
+            {{/if}}
           </ul>
         {{/if}}
       {{else}}
