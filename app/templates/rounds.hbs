@@ -138,21 +138,61 @@
 
   {{#if this.showMenu}}
     <div class="absolute border bg-white w-4/5 inset-x-0 mx-auto top-0 p-4 mt-12 z-20">
-      <p class="mb-4"><strong class="text-xl">MENU</strong></p>
-      <ul class="text-left text-xl">
-        <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 0) "bg-gray-100 border-gray-300"}}">
-          <button type="button" {{on "click" (perform this.resumeRoundTask)}}>BACK TO GAME</button>
-        </li>
-        <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 1) "bg-gray-100 border-gray-300"}}">
-          <LinkTo @route="intro">BACK TO GAMETOP (END THIS GAME)</LinkTo>
-        </li>
-        <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 2) "bg-gray-100 border-gray-300"}}">
-          <button type="button" {{on "click" (fn this.startEditPoints)}}>MODIFY POINTS</button>
-        </li>
-        <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 3) "bg-gray-100 border-gray-300"}}">
-          <button type="button" {{on "click" this.retryRound}}>RETRY</button>
-        </li>
-      </ul>
+      {{#if this.showModifyingPoints}}
+        <p class="mb-2"><strong class="text-xl">MODIFYING POINTS</strong></p>
+        {{#if this.currentModifyingPlayerName}}
+          <p class="mb-2">{{this.currentModifyingPlayerName}}</p>
+          <ul class="text-left text-xl">
+            {{#each this.currentModifyingTricks as |trick i|}}
+              <li class="border border-white flex items-center my-1 py-1 px-2 relative {{if (eq this.currentMenuOption i) "bg-gray-100 border-gray-300"}}">
+                <span class="flex-1 truncate">{{trick-property trick.key "enName"}}</span>
+                <span class="ml-4 px-6 relative text-center text-base w-32">
+                  <span {{on "click" this.modifyNextTrick}}>
+                    {{#if trick.cleared}}SUCCESS{{else}}&nbsp;{{/if}}
+                  </span>
+                  {{#if (eq this.currentMenuOption i)}}
+                    <button type="button" {{on "click" (fn this.toggleTrickCleared trick)}} class="absolute inset-y-0 left-0 transform w-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 24"><path d="M16,0,0,12,16,24Z" style="fill:#ff0"/></svg>
+                    </button>
+                    <button type="button" {{on "click" (fn this.toggleTrickCleared trick)}} class="absolute inset-y-0 right-0 transform w-4">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 24"><path d="M0,24,16,12,0,0Z" style="fill:#ff0"/></svg>
+                    </button>
+                  {{/if}}
+                </span>
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <p class="mb-2">どのプレイヤ一のポイントを修正しますか</p>
+          <ul class="text-left text-xl">
+            <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 0) "bg-gray-100 border-gray-300"}}">
+              <button type="button" {{on "click" this.showModifyCurrentPlayerPoints}}>{{this.currentPlayerName}}</button>
+            </li>
+            {{!-- Don't show "previous player" on 1st round + 1st player --}}
+            {{!-- {{#if (not (and (eq this.currentRound 1) (eq this.currentPlayer 0)))}} --}}
+              <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 1) "bg-gray-100 border-gray-300"}}">
+                <button type="button" {{on "click" this.showModifyPreviousPlayerPoints}}>１つ前のプレイヤ一</button>
+              </li>
+            {{!-- {{/if}} --}}
+          </ul>
+        {{/if}}
+      {{else}}
+        <p class="mb-4"><strong class="text-xl">MENU</strong></p>
+        <ul class="text-left text-xl">
+          <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 0) "bg-gray-100 border-gray-300"}}">
+            <button type="button" {{on "click" (perform this.resumeRoundTask)}}>BACK TO GAME</button>
+          </li>
+          <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 1) "bg-gray-100 border-gray-300"}}">
+            <LinkTo @route="intro">BACK TO GAMETOP (END THIS GAME)</LinkTo>
+          </li>
+          <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 2) "bg-gray-100 border-gray-300"}}">
+            <button type="button" {{on "click" (fn this.startEditPoints)}}>MODIFY POINTS</button>
+          </li>
+          <li class="border border-white my-1 py-1 px-2 {{if (eq this.currentMenuOption 3) "bg-gray-100 border-gray-300"}}">
+            <button type="button" {{on "click" this.retryRound}}>RETRY</button>
+          </li>
+        </ul>
+      {{/if}}
     </div>
   {{/if}}
 

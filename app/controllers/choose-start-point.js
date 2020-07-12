@@ -40,6 +40,7 @@ export default class ChooseStartPointController extends Controller {
     if (!this.manualMode) {
       this.game.players.forEach((player, i) => {
         player.points = this.points[this.currentPoints];
+        player.startingPoints = this.points[this.currentPoints];
       });
       this.router.transitionTo('rounds');
       return;
@@ -58,6 +59,7 @@ export default class ChooseStartPointController extends Controller {
     // update game players data
     this.game.players.forEach((player, i) => {
       player.points = this.points[this.playerPoints[i]];
+      player.startingPoints = this.points[this.playerPoints[i]];
     });
 
     this.router.transitionTo('rounds');

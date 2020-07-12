@@ -24,6 +24,7 @@ export default class RoundsController extends Controller {
   @tracked showRoundEndedMessage;
   @tracked showBonusPoints;
   @tracked showTrickChallenge;
+  @tracked showModifyingPoints;
 
   @tracked tricks;
   @tracked editingTricks;
@@ -34,6 +35,9 @@ export default class RoundsController extends Controller {
   @tracked roundCountdown;
 
   @tracked currentMenuOption;
+  @tracked currentModifyingRound;
+  @tracked currentModifyingPlayer;
+  @tracked currentModifyingTricks;
 
   rootURL = config.rootURL;
   maxRounds = 5;
@@ -42,18 +46,46 @@ export default class RoundsController extends Controller {
   roundCountdownDefault = 30;
   isPlaying = false;
   bannerEl = undefined;
-  roundPoints = {};
+  history = {};
 
   get currentPlayerName() {
     return this.game.players[this.currentPlayer]?.name;
   }
 
+  get currentModifyingPlayerName() {
+    return this.game.players[this.currentModifyingPlayer]?.name;
+  }
+
   setHistoricalPoints() {
-    if (!this.roundPoints['round' + this.currentRound]) {
-      this.roundPoints['round' + this.currentRound] = [];
+    if (!this.history['round' + this.currentRound]) {
+      this.history['round' + this.currentRound] = [];
     }
 
-    this.roundPoints['round' + this.currentRound][this.currentPlayer] = this.currentPoints;
+    let bonus = true;
+    const tricks = this.tricks.map((trick) => {
+      const { level } = this.game.tricks[trick.key];
+      const { points } = this.game.levels['lv' + level];
+      const { key, cleared } = trick;
+
+      if (!trick.cleared) {
+        bonus = false;
+      }
+
+      return {
+        @tracked key,
+        @tracked cleared,
+        @tracked points
+      };
+    });
+
+    const bonusPoints = (bonus) ? this.bonusPoints : 0;
+    const points = this.currentPoints - bonusPoints;
+
+    this.history['round' + this.currentRound][this.currentPlayer] = {
+      tricks,
+      points,
+      bonusPoints
+    };
   }
 
   setCurrentPlayer(index) {
@@ -161,19 +193,216 @@ export default class RoundsController extends Controller {
     this.currentTrick = index <= 0 ? this.tricks.length - 1 : index - 1;
   }
 
-  // @TODO: edit points
   @action startEditPoints() {
     console.log('startEditPoints');
+    this.showModifyingPoints = true;
+    this.currentMenuOption = 0;
+  }
+
+  @action showModifyCurrentPlayerPoints() {
+    const player = this.currentPlayer;
+    this.currentModifyingPlayer = player;
+    this.currentModifyingRound = this.currentRound;
+    this.currentModifyingTricks = this.tricks.map((t) => {
+      const trick = {
+        @tracked cleared: false,
+        key: ''
+      };
+
+      trick.cleared = t.cleared;
+      trick.key = t.key;
+
+      return trick;
+    });
+    console.log(player, this.currentModifyingTricks);
+  }
+
+  @action showModifyPreviousPlayerPoints() {
+    // disable on 1st round + 1st player
+    if (this.currentRound === 1 && this.currentPlayer === 0) {
+      return;
+    }
+
+    this.currentMenuOption = 0;
+
+    let player;
+    let round;
+
+    if (this.currentPlayer -1 < 0) {
+      player = this.game.players.length - 1;
+      round = this.currentRound - 1;
+    } else {
+      player = this.currentPlayer - 1;
+      round = this.currentRound;
+    }
+
+    this.currentModifyingPlayer = player;
+    this.currentModifyingRound = round;
+    this.currentModifyingTricks = this.history['round' + round][player].tricks;
+    console.log(player, round);
+  }
+
+  @task *modifyPoints() {
+    console.log('end modify points');
+    console.log(this.currentModifyingPlayer);
+    console.log(this.currentModifyingTricks);
+
+    // current player
+    if (this.currentPlayer === this.currentModifyingPlayer) {
+      let bonus = true;
+      let points = this.game.players[this.currentModifyingPlayer].points;
+      let trick;
+
+      this.currentModifyingTricks.forEach((t, i) => {
+        // update trick
+        this.tricks[i].cleared = t.cleared;
+
+        // get points values
+        if (t.cleared) {
+          const { level } = this.game.tricks[t.key];
+          points -= this.game.levels['lv' + level].points;
+          trick = t;
+
+        // failed at least 1 trick - no bonus points
+        } else {
+          bonus = false;
+        }
+      });
+
+      if (bonus) {
+        points -= this.bonusPoints;
+        this.showMenu = false;
+        this.showStartCountdown = false;
+      }
+
+      // handle challenge trick
+      if (points <= 0) {
+        console.log('TODO: handle challenge trick');
+        this.showStartCountdown = true;
+        this.setupTrickChallenge();
+        yield this.animateStartCountdownTask.perform();
+        yield this.animateRoundCountdownTask.perform();
+        return;
+      }
+
+      // update points
+      this.currentPoints = points;
+
+      // end turn
+      if (bonus) {
+        // show full page animation
+        yield this.animateRoundEndedTask.perform();
+
+        // save points and go to the next player
+        yield this.nextRoundPlayerTask.perform();
+      }
+
+    // previous player
+    } else {
+      const userRound = this.history['round' + this.currentModifyingRound][this.currentModifyingPlayer];
+      const { startingPoints } = this.game.players[this.currentModifyingPlayer];
+
+      let bonusPoints = this.bonusPoints;
+      let totalPoints = 0;
+      let points = 0;
+
+      // get modified points
+      this.currentModifyingTricks.forEach((trick, i) => {
+        userRound.tricks[i].cleared = trick.cleared;
+        if (trick.cleared) {
+          points += userRound.tricks[i].points;
+        } else {
+          bonusPoints = 0;
+        }
+      });
+
+      // update w/ bonus points
+      points += bonusPoints;
+
+      // update historical points
+      userRound.points = points;
+      userRound.bonusPoints = bonusPoints;
+
+      // get new total from all rounds
+      Object.keys(this.history).forEach((roundKey) => {
+        const p = this.history[roundKey][this.currentModifyingPlayer];
+        if (p && p.points) {
+          totalPoints += p.points;
+        }
+      });
+
+      console.log({ points, bonusPoints, totalPoints, startingPoints })
+
+      // update total points
+      this.game.players[this.currentModifyingPlayer].points = startingPoints - totalPoints;
+    }
+
+    // close menu
+    this.currentMenuOption = 0;
+    this.currentModifyingPlayer = undefined;
+    this.showModifyingPoints = false;
+  }
+
+  @action toggleTrickCleared(trick) {
+    if (!trick) {
+      trick = this.currentModifyingTricks[this.currentMenuOption];
+    }
+    trick.cleared = !trick.cleared;
+  }
+
+  @action modifyNextTrick() {
+    const index = this.currentMenuOption;
+    const max = this.currentModifyingTricks.length;
+
+    // no more tricks available - save
+    if (index + 1 >= max) {
+      this.modifyPoints.perform();
+      return;
+    }
+
+    this.currentMenuOption = index + 1 < max ? index + 1 : 0;
+  }
+
+  @action modifyPrevTrick() {
+    const index = this.currentMenuOption;
+    const max = this.currentModifyingTricks.length - 1;
+    this.currentMenuOption = index - 1 >= 0 ? index - 1 : max;
   }
 
   prevMenuOption() {
+    if (this.showModifyingPoints) {
+      // toggle trick status
+      if (this.currentModifyingPlayer !== undefined) {
+        this.toggleTrickCleared();
+        return;
+      // disable on 1st round + 1st player
+      } else if (this.currentRound === 1 && this.currentPlayer === 0) {
+        this.currentMenuOption = 0;
+        return;
+      }
+    }
+
     const index = this.currentMenuOption;
-    this.currentMenuOption = index - 1 >= 0 ? index - 1 : 3;
+    let max = this.showModifyingPoints ? 1 : 3;
+    this.currentMenuOption = index - 1 >= 0 ? index - 1 : max;
   }
 
   nextMenuOption() {
+    if (this.showModifyingPoints) {
+      // toggle trick status
+      if (this.currentModifyingPlayer !== undefined) {
+        this.toggleTrickCleared();
+        return;
+      // disable on 1st round + 1st player
+      } else if (this.currentRound === 1 && this.currentPlayer === 0) {
+        this.currentMenuOption = 0;
+        return;
+      }
+    }
+
     const index = this.currentMenuOption;
-    this.currentMenuOption = index + 1 <= 3 ? index + 1 : 0;
+    const max = this.showModifyingPoints ? 1 : 3;
+    this.currentMenuOption = index + 1 <= max ? index + 1 : 0;
   }
 
   @task *resumeRoundTask() {
@@ -228,7 +457,6 @@ export default class RoundsController extends Controller {
       }
     }
 
-    // @TODO: handle arcade buttons when the menu is opened
     if (this.showMenu) {
       if (button === 'left') {
         return this.prevMenuOption();
@@ -239,20 +467,51 @@ export default class RoundsController extends Controller {
       }
 
       if (button === 'up') {
-        switch (this.currentMenuOption) {
-          case 0:
-            return this.resumeRoundTask.perform();
-          case 1:
-            return this.router.transitionTo('intro');
-          case 2:
-            return this.startEditPoints();
-          case 3:
-            return this.retryRound();
+        // editing points
+        if (this.showModifyingPoints) {
+          // choose player
+          if (this.currentModifyingPlayer === undefined) {
+            switch (this.currentMenuOption) {
+              case 0:
+                return this.showModifyCurrentPlayerPoints();
+              case 1:
+                return this.showModifyPreviousPlayerPoints();
+            }
+          // modify player
+          } else {
+            this.modifyNextTrick();
+          }
+
+        // default
+        } else {
+          switch (this.currentMenuOption) {
+            case 0:
+              return this.resumeRoundTask.perform();
+            case 1:
+              return this.router.transitionTo('intro');
+            case 2:
+              return this.startEditPoints();
+            case 3:
+              return this.retryRound();
+          }
         }
       }
 
       if (button === 'down') {
-        return this.resumeRoundTask.perform();
+        if (this.showModifyingPoints) {
+          if (this.currentModifyingPlayer === undefined) {
+            this.showModifyingPoints = false;
+            this.currentMenuOption = 0;
+            this.currentModifyingPlayer = undefined;
+            return;
+          } else {
+            this.currentMenuOption = 0;
+            this.currentModifyingPlayer = undefined;
+            return;
+          }
+        } else {
+          return this.resumeRoundTask.perform();
+        }
       }
       return;
     }
@@ -343,8 +602,6 @@ export default class RoundsController extends Controller {
       points = points - this.bonusPoints;
     }
 
-    // @TODO: show crown
-
     // player is past 0 - show trick challenge
     if (points <= 0) {
       // stop counter
@@ -353,23 +610,12 @@ export default class RoundsController extends Controller {
       // pause for a second to display cleared messages
       yield timeout(1250);
 
-      // get a random trick based on player's level
-      const playerLevel = this.game.players[this.currentPlayer].level;
-      const { tricks } = this.game.levels['lv' + playerLevel];
-      const randomTrick = tricks[Math.floor(Math.random() * tricks.length)];
-
-      // set trick challenge and update UI
-      this.trickChallenge = { @tracked cleared: false, @tracked key: randomTrick };
-      this.showTrickChallenge = true;
-
-      // set round countdown to challenge trick
-      this.roundCountdown = this.game.tricks[randomTrick].timeLimit;
-
-      // @TODO show trick challenge message
-      // yield ....
+      this.showStartCountdown = true;
+      this.setupTrickChallenge();
+      yield this.animateStartCountdownTask.perform();
 
       // start round countdown
-      this.animateRoundCountdownTask.perform();
+      yield this.animateRoundCountdownTask.perform();
       return;
     }
 
@@ -395,6 +641,23 @@ export default class RoundsController extends Controller {
     }
   }
 
+  setupTrickChallenge() {
+    // get a random trick based on player's level
+    const playerLevel = this.game.players[this.currentPlayer].level;
+    const { tricks } = this.game.levels['lv' + playerLevel];
+    const randomTrick = tricks[Math.floor(Math.random() * tricks.length)];
+
+    // set trick challenge and update UI
+    this.trickChallenge = { @tracked cleared: false, @tracked key: randomTrick };
+    this.showTrickChallenge = true;
+
+    // set round countdown to challenge trick
+    this.roundCountdown = this.game.tricks[randomTrick].timeLimit;
+
+    // @TODO show trick challenge message
+    // yield ....
+  }
+
   @task *handleTrickChallengeTask(finalTrick) {
     // console.log('showTrickChallenge', { finalTrick });
     const clearedTrick = finalTrick == 'debug' || finalTrick == this.trickChallenge.key;
@@ -415,7 +678,7 @@ export default class RoundsController extends Controller {
     this.currentPoints = 0;
 
     // save historical points grouped by round and player
-    this.saveHistoricalPoints();
+    this.setHistoricalPoints();
 
     // update player's points
     this.game.players[this.currentPlayer].points = this.currentPoints;
@@ -542,6 +805,9 @@ export default class RoundsController extends Controller {
     this.showBonusPoints = false;
     this.showTrickChallenge = false;
     this.trickChallenge = undefined;
+    this.showModifyingPoints = false;
+    this.currentModifyingPlayer = undefined;
+    this.currentModifyingTricks = [];
   }
 
   resetTrickEditing() {
@@ -558,7 +824,7 @@ export default class RoundsController extends Controller {
     }
 
     // start reset here
-    this.roundPoints = {};
+    this.history = {};
     this.currentMenuOption = 0;
     this.resetTrickEditing();
     this.resetRound(1);

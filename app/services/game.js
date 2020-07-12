@@ -38,13 +38,15 @@ export default class GameService extends Service {
     const player = {
       @tracked name: '',
       @tracked level: 0,
-      @tracked points: 0
+      @tracked points: 0,
+      @tracked startingPoints: 0
     };
 
     // update properties with arguments
     player.name = name;
     player.level = level;
     player.points = points;
+    player.startingPoints = points;
 
     return player;
   }
