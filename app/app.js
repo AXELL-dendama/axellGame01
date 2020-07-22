@@ -4,6 +4,7 @@ import loadInitializers from 'ember-load-initializers';
 import config from './config/environment';
 import './utils/pubsub';
 import './utils/native-trick';
+import './utils/key-event';
 
 export default class App extends Application {
   rootElement = '#app-chrome';
